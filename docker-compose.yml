@@ -1,10 +1,25 @@
 version: '3'
 services:
     php-apache:
-        image: php:7.2-apache
+        build:
+            context: .
+            dockerfile: apache.Dockerfile
         ports:
             - 80:80
         volumes:
             - ./src:/var/www/html
             - ./server/httpd.conf:/etc/apache2/apache2.conf
             - ./server/php.ini:/usr/local/etc/php/php.ini
+        depends_on:
+            - database
+    database:
+        image: mysql:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD: my_secret_pw_shh
+            MYSQL_DATABASE: webshop
+            MYSQL_USER: devuser
+            MYSQL_PASSWORD: devpass
+        ports:
+            - "9906:3306"
+        volumes:
+            - ./database:/docker-entrypoint-initdb.d
