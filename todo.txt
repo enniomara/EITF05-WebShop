@@ -7,8 +7,8 @@ Login system
  - Loggin function
     - Show that the user is logged in
  - Password policy
-    - Min xxx char leght of uppercase, lowercase, numbers, (!.-....)?
-    - Needs to contain ....
+    - Min 7 char leght of uppercase, lowercase, numbers, (!.-....)?
+    - Needs to contain one uppercase,lowercase,number,(!.-....)
     - Blacklist Common password
     - Passwordhash xxx
 
