@@ -4,13 +4,19 @@ services:
         build:
             context: .
             dockerfile: apache.Dockerfile
+        environment:
+            SSL_CERT_LOCATION: '/etc/ssl/private/ssl.cert'
+            SSL_KEY_LOCATION: '/etc/ssl/private/ssl.key'
         ports:
             - 80:80
+            - 443:443
         volumes:
             - ./src:/var/www/html
             - ./server/httpd.conf:/etc/apache2/apache2.conf
             - ./server/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
             - ./server/php.ini:/usr/local/etc/php/php.ini
+            - ./server/ssl.crt:/etc/ssl/private/ssl.cert
+            - ./server/ssl.key:/etc/ssl/private/ssl.key
         depends_on:
             - database
     database:
