@@ -13,6 +13,17 @@ First of all make sure [Docker](https://docs.docker.com/install/) and [Docker-Co
 
 Docker now requires an account to download, so if you don't want to create an account, use one of the accounts listed [here](http://bugmenot.com/view/docker.com).
 
+Before proceeding with running the webserver, you need to set up certificates for the ssl connection.
+The script has been retrieved from [here](https://letsencrypt.org/docs/certificates-for-localhost/).
+
+```
+openssl req -x509 -out server/ssl.crt -keyout server/ssl.key \
+  -newkey rsa:2048 -nodes -sha256 \
+  -subj '/CN=localhost' -extensions EXT -config <( \
+   printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
+```
+
+
 To run the containers run the following on the folder where `docker-compose.yml` is located:
 ```
 $ docker-compose up

@@ -17,3 +17,7 @@ tags
 # Persistent undo
 [._]*.un~
 
+.idea
+
+server/ssl.crt
+server/ssl.key
