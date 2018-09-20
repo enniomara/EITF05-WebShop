@@ -9,6 +9,7 @@ services:
         volumes:
             - ./src:/var/www/html
             - ./server/httpd.conf:/etc/apache2/apache2.conf
+            - ./server/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
             - ./server/php.ini:/usr/local/etc/php/php.ini
         depends_on:
             - database
