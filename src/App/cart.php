@@ -1,5 +1,7 @@
 <?php
+#// TODO: DB-connection needs to be updated to same as index.php
 $db = new PDO('mysql:host=database;dbname=webshop', 'devuser', 'devpass');
+//Selecting the sql table
 $sql= "SELECT * FROM orderItems INNER JOIN items ON orderItems.itemId=items.id WHERE orderItems.orderId='1'";
 $sql_items = $db->query($sql);
 
