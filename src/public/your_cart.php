@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php
-  include('components.php');
+  include('../App/components.php');
  ?>
 
 <html lang="en">
@@ -15,7 +15,7 @@
       //<!-- Navbar -->
       navbar();
       //<!-- The cart -->
-      include('cart.php');
+      include('../App/cart.php');
       //<!-- Footer -->
       footer();
     ?>

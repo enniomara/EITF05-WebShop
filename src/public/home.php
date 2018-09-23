@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <?php
-  include('components.php');
+  include('../App/components.php');
  ?>
-
 <html lang="en">
 
-    <?php
-      head();
-     ?>
+<?php
+  head();
+ ?>
 
   <body>
     <?php
       //<!-- Navbar -->
       navbar();
       //<!-- Product rendering -->
-      include('webbshop.php');
+      include('../App/webbshop.php');
       //<!-- Footer -->
       footer();
       ?>

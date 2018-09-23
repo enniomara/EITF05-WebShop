@@ -5,7 +5,7 @@ $sql_items = $db->query($sql);
 
 // -------- Rendering Header ------------
 echo '<header class="jumbotron my-4">
-<h1 style="text-align:center;"> Your order </h1>
+<h1 class="display-1"><center> Your Cart </center></h1>
 </header>';
 
 // -------- Ordertable head------------
