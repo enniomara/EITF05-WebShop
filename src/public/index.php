@@ -1,13 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../App/autoload.php';
-
-use App\Classes\DBConnection;
+require_once __DIR__ . '/../App/global.php';
 
 try {
-    $dbh = new DBConnection();
     $items = [];
-    foreach ($dbh->query('SELECT * from users') as $row) {
+    foreach ($databaseConnection->query('SELECT * from users') as $row) {
         $items[] = $row;
     }
     echo '<pre>';
