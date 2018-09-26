@@ -11,6 +11,8 @@ interface SessionManagerInterface {
     static function regenerateSession();
 
     static function validateSession();
+
+    static function destroySession();
 }
 
 ?>
