@@ -3,4 +3,4 @@ php:
   - 7.2
 
 script: 
-  ./runTests.sh
+  phpunit --configuration src/phpunit.xml --testsuite Unit
