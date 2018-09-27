@@ -40,4 +40,3 @@ class SessionManager implements SessionManagerInterface{
         session_destroy();
     }
 }
-?>

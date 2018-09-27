@@ -14,5 +14,3 @@ interface SessionManagerInterface {
 
     public function destroySession();
 }
-
-?>
