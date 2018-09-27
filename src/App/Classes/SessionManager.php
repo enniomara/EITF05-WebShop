@@ -1,95 +1,41 @@
 <?php 
 
 namespace App\Classes;
-//namespace App\Interfaces;
 
-//include('SessionManagerInterface.php');
+use App\Interfaces\SessionManagerInterface;
 
-class SessionManager{
-    // For starting a session but also add cookie
-    static function startSession($name, $limit = 0, $path = '/', $domain = null, $secure = null) {
+class SessionManager implements SessionManagerInterface{
 
-        // Setting cookie name
-        session_name($name . '_Session');
-        
-        // Setting the server name
-        $domain = isset($domain) ? $domain : isset($_SERVER['SERVER_NAME']);
+    static function startSession($name, $limit = 0, $path = '/', $domain = null, $secure = null){
+        $time = $_SERVER['REQUEST_TIME'];
+        self::validateSession($time);
 
-        // Setting default secure value
-        $https = isset($secure) ? $secure : isset($_SERVER['HTTPS']);
+        if(!session_start()) session_start();
 
-        // Adding cookie and starting session
-        session_set_cookie_params($limit, $path, $domain, $secure, true);
-        session_start();
+        $_SESSION['LAST_ACTIVITY'] = $time;
+        $_SESSION['name'] = $name;
+    }
 
-        // Make sure the session hasn't expired, and destroy it if it has
-        if(self::validateSession()){
-            // Check to see if the session is new or a hijacking attempt
-            if(!self::stopHijack()){
-                // Reset session data and regenerate id
-                $_SESSION = array();
-                $_SESSION['IPaddress'] = $_SERVER['REMOTE_ADDR'];
-                $_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
-                self::regenerateSession();
+    static function preventHijacking(){}
 
-            // Give a 5% chance of the session id changing on any request
-            } elseif(rand(1, 100) <= 5){
-                self::regenerateSession();
-            }
-        } else {
-            $_SESSION = array();
-            session_destroy();
-            session_start();
+    static function regenerateSession(){
+        return session_regenerate_id();
+    }
+
+    static function validateSession($time){
+        // ToDo: Check so that parameters are okay.
+        if(isset($_SESSION['LAST_ACTIVITY']) && ($time - $_SESSION['LAST_ACTIVITY']) > self::timeout_duration){
+            self::destroySession();
         }
     }
 
-    static protected function stopHijack(){
-
-        // Prevent new sessions, not really sure why
-        if(!isset($_SESSION['IPaddress']) || !isset($_SESSION['userAgent'])) return false;
-
-        // Prevent comming from addresses which not is the server address
-        if($_SESSION['IPaddress'] != $_SERVER['REMOTE_ADDR']) return false;
-
-        // Preventing if it's not the same user
-        if($_SESSION['userAgent'] != $_SERVER['HTTP_USER_AGENT']) return false;
-
-        return true;
-    }
-
-    static function regenerateSession(){
-        // If this session is obsolete it means there already is a new id
-        if(isset($_SESSION['OBSOLETE']) || $_SESSION['OBSOLETE'] == true)
-            return;
-
-        // Set current session to expire in 10 seconds
-        $_SESSION['OBSOLETE'] = true;
-        $_SESSION['EXPIRES'] = time() + 10;
-
-        // Create new session without destroying the old one
-        session_regenerate_id(false);
-
-        // Grab current session ID and close both sessions to allow other scripts to use them
-        $newSession = session_id();
-        session_write_close();
-
-        // Set session ID to the new one, and start it back up again
-        session_id($newSession);
-        session_start();
-
-        // Now we unset the obsolete and expiration values for the session we want to keep
-        unset($_SESSION['OBSOLETE']);
-        unset($_SESSION['EXPIRES']);
-    }
-
-    static protected function validateSession(){
-        if( isset($_SESSION['OBSOLETE']) && !isset($_SESSION['EXPIRES']) )
-            return false;
-
-        if(isset($_SESSION['EXPIRES']) && $_SESSION['EXPIRES'] < time())
-            return false;
-
-        return true;
+    static function destroySession(){
+        // ToDo: Remove PHPSESSID from browser (cookie)
+        // Clear session from globals
+        $_SESSION = array();
+        session_unset();
+        // Clear session from disk
+        session_destroy();
     }
 }
 ?>
