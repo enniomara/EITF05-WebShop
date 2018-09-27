@@ -2,8 +2,9 @@
 
 require_once __DIR__ . '/../App/global.php';
 
+use App\Classes\SessionManager;
+
 try {
-    $dbh = new DBConnection();
     $session = new SessionManager();
 
     //Starting session
