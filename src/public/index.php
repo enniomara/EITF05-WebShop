@@ -14,6 +14,7 @@ try {
     foreach ($databaseConnection->query('SELECT * from users') as $row) {
         $items[] = $row;
     }
+    
     echo '<pre>';
     print_r($items);
     echo '</pre>';
