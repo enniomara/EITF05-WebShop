@@ -8,7 +8,7 @@ class SessionManager implements SessionManagerInterface{
 
     const timeout_duration = 1800;
 
-    static function startSession($name, $limit = 0, $path = '/', $domain = null, $secure = null){
+    public function startSession($name, $limit = 0, $path = '/', $domain = null, $secure = null){
         $time = $_SERVER['REQUEST_TIME'];
         self::validateSession($time);
 
@@ -18,20 +18,20 @@ class SessionManager implements SessionManagerInterface{
         $_SESSION['name'] = $name;
     }
 
-    static function preventHijacking(){}
+    public function preventHijacking(){}
 
-    static function regenerateSession(){
+    public function regenerateSession(){
         return session_regenerate_id();
     }
 
-    static function validateSession($time){
+    public function validateSession($time){
         // ToDo: Check so that parameters are okay.
         if(isset($_SESSION['LAST_ACTIVITY']) && ($time - $_SESSION['LAST_ACTIVITY']) > self::timeout_duration){
             self::destroySession();
         }
     }
 
-    static function destroySession(){
+    public function destroySession(){
         // ToDo: Remove PHPSESSID from browser (cookie)
         // Clear session from globals
         $_SESSION = array();

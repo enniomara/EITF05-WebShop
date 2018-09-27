@@ -4,15 +4,15 @@ namespace App\Interfaces;
 
 interface SessionManagerInterface {
 
-    static function startSession($name, $limit = 0, $path = '/', $domain = null, $secure = null);
+    public function startSession($name, $limit = 0, $path = '/', $domain = null, $secure = null);
 
-    static function preventHijacking();
+    public function preventHijacking();
 
-    static function regenerateSession();
+    public function regenerateSession();
 
-    static function validateSession($time);
+    public function validateSession($time);
 
-    static function destroySession();
+    public function destroySession();
 }
 
 ?>
