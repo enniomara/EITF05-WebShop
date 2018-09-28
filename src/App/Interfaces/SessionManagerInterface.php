@@ -10,7 +10,7 @@ interface SessionManagerInterface {
     /**
      * For easies starting a session and creating a cookie.
      */
-    public function startSession($name, $limit = 0, $path = '/', $domain = null, $secure = null);
+    public function startSession();
 
     /**
      * Updating current session ID with a new one.

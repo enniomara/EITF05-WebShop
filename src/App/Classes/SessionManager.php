@@ -8,16 +8,15 @@ class SessionManager implements SessionManagerInterface{
 
     const timeout_duration = 1800;
 
-    public function startSession($name, $limit = 0, $path = '/', $domain = null, $secure = null){
+    public function startSession(){
         $time = $_SERVER['REQUEST_TIME'];
         $this->validateSession();
 
         if(!session_start()) session_start();
 
         $_SESSION['LAST_ACTIVITY'] = $time;
-        $_SESSION['name'] = $name;
     }
-    
+
     public function regenerateSession(){
         return session_regenerate_id();
     }
