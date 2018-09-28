@@ -6,9 +6,9 @@ use App\Interfaces\SessionManagerInterface;
 
 class SessionManager implements SessionManagerInterface {
 
-    const timeout_duration = 1800;
+    private $timeout_duration = 1800;
 
-    protected $started = false;
+    private $started = false;
 
     public function start() {
         $time = $_SERVER['REQUEST_TIME'];
