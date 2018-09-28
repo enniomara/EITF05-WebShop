@@ -33,7 +33,7 @@ class SessionManager implements SessionManagerInterface {
     public function validate() {
         // ToDo: Check so that parameters are okay.
         $time = $_SERVER['REQUEST_TIME'];
-        if ( isset( $_SESSION['LAST_ACTIVITY'] ) && ( $time - $_SESSION['LAST_ACTIVITY'] ) > $this->timeout_duration ) {
+        if ( isset( $_SESSION['LAST_ACTIVITY'] ) && ( $time - $_SESSION['LAST_ACTIVITY'] ) > $this->timeoutDuration ) {
             $this->destroy();
 
             return false;
