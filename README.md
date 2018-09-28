@@ -29,6 +29,12 @@ To run the containers run the following on the folder where `docker-compose.yml`
 $ docker-compose up
 ```
 
+#### Tests
+The tests available can be run by running the runTests script.
+```
+$ ./runTests.sh
+```
+
 ### Other methods
 An alternative to docker are stacks like [WAMP](http://www.wampserver.com/en/), [MAMP](https://www.mamp.info/en/), or even installinng the services separately.
 
