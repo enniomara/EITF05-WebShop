@@ -2,18 +2,20 @@
 
 namespace App\Classes;
 
+use App\Classes\DAO\ItemDAO;
 use App\Classes\Models\Item;
 
 class ItemService
 {
     /**
-     * @var \PDO
+     * @var ItemDAO
      */
-    private $databaseConnection;
+    private $itemDAO;
 
-    public function __construct(\PDO $databaseConnection)
+    public function __construct(ItemDAO $itemDAO)
     {
-        $this->databaseConnection = $databaseConnection;
+        $this->itemDAO = $itemDAO;
+
     }
 
     /**
@@ -23,9 +25,7 @@ class ItemService
      */
     public function findAllItems(): array
     {
-        $stmt = $this->databaseConnection->prepare('select id, name, price from items');
-        $stmt->execute();
-        $databaseItems = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $databaseItems = $this->itemDAO->findAllItems();
         $response = [];
 
         foreach ($databaseItems as $item) {
@@ -43,12 +43,7 @@ class ItemService
      */
     public function findAllByIds(int ...$ids): array
     {
-        // PDO requires '?' for every parameter. This creates a '?' for all the parameters given in $ids
-        $in = str_repeat('?,', count($ids) - 1) . '?';
-        $sql = "SELECT id, name, price FROM items WHERE id IN ($in)";
-        $stmt = $this->databaseConnection->prepare($sql);
-        $stmt->execute($ids);
-        $databaseItems = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $databaseItems = $this->itemDAO->findAllByIds($ids);
 
         $response = [];
         foreach ($databaseItems as $item) {
