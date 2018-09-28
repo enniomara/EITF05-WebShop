@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <?php
+  include('../App/global.php');
   include('../App/components.php');
+
  ?>
 <html lang="en">
 

@@ -1,10 +1,17 @@
 
 <?php
 #// TODO: DB-connection needs to be updated to same as index.php
-$db = new PDO('mysql:host=database;dbname=webshop', 'devuser', 'devpass');
+//$db = new PDO('mysql:host=database;dbname=webshop', 'devuser', 'devpass');
 //Selecting the sql table
-$sql= "SELECT id,name,price FROM items";
-$sql_items = $db->query($sql);
+//$sql= "SELECT id,name,price FROM items";
+//$sql_items = $db->query($sql);
+
+use App\Classes\ItemService;
+use App\Classes\DAO\ItemDAO;
+$itemDAO = new ItemDAO($databaseConnection);
+$itemserv =new ItemService($itemDAO);
+$sql_items = $itemserv->findAllItems();
+
 
 // -------- Rendering Header ------------
 echo '<header class="jumbotron my-4">
@@ -14,6 +21,7 @@ echo '<header class="jumbotron my-4">
 
 // -------- Rendering Container for products ------------
 echo '<div class="container">
+  <form action="cart.php" method="post">
   <div class="row text-center">';
 
 
@@ -26,14 +34,14 @@ foreach ($sql_items as $row) {
           <img class="card-img-top" src="http://placehold.it/500x325" alt="">
 
           <div class="card-body">
-            <h3 class="card-title">',$row["name"],'</h3>
-            <h4>',$row["price"],'kr</h4>
+            <h3 class="card-title">',$row->getName(),'</h3>
+            <h4>',$row->getPrice(),'kr</h4>
            </div>
 
           <div class="card-footer">
-            <input type="number" min="0" class="form-control" id="',$row["id"],'" placeholder="Antal">
+            <input type="number" min="0" class="form-control" id="',$row->getId(),'" placeholder="Antal">
             <br>
-            <a class="btn btn-primary">Lägg till i varukorg</a>
+
           </div>
 
         </div>
@@ -44,10 +52,8 @@ foreach ($sql_items as $row) {
 // -------- Ending Container for products ------------
 echo '
 </div>
+<center><input class="btn btn-primary btn-lg btn-block" type="submit" value="Add items to cart"></center>
+<br>
+</form>
 </div>';
-
-
-
-
-
 ?>
