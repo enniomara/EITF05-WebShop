@@ -18,7 +18,8 @@ class SessionManager implements SessionManagerInterface{
         $_SESSION['name'] = $name;
     }
 
-    public function preventHijacking(){}
+    // ToDo: Implement?
+    private function preventHijacking(){}
 
     public function regenerateSession(){
         return session_regenerate_id();
