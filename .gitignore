@@ -21,3 +21,5 @@ tags
 
 server/ssl.crt
 server/ssl.key
+
+src/vendor
