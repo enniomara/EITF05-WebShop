@@ -10,25 +10,23 @@ class SessionManager implements SessionManagerInterface{
 
     public function startSession($name, $limit = 0, $path = '/', $domain = null, $secure = null){
         $time = $_SERVER['REQUEST_TIME'];
-        self::validateSession($time);
+        $this->validateSession();
 
         if(!session_start()) session_start();
 
         $_SESSION['LAST_ACTIVITY'] = $time;
         $_SESSION['name'] = $name;
     }
-
-    // ToDo: Implement?
-    private function preventHijacking(){}
-
+    
     public function regenerateSession(){
         return session_regenerate_id();
     }
 
-    public function validateSession($time){
+    public function validateSession(){
         // ToDo: Check so that parameters are okay.
-        if(isset($_SESSION['LAST_ACTIVITY']) && ($time - $_SESSION['LAST_ACTIVITY']) > self::timeout_duration){
-            self::destroySession();
+        $time = $_SERVER['REQUEST_TIME'];
+        if(isset($_SESSION['LAST_ACTIVITY']) && ($time - $_SESSION['LAST_ACTIVITY']) > $this->timeout_duration){
+            $this->destroySession();
             return false;
         }
 

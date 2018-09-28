@@ -24,7 +24,7 @@ interface SessionManagerInterface {
      * 
      * @return bool true if session is valid and false if session isn't
      */
-    public function validateSession($time);
+    public function validateSession();
 
     /**
      * Removing a session and its content.
