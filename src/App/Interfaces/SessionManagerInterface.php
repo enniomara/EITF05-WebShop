@@ -13,11 +13,6 @@ interface SessionManagerInterface {
     public function startSession($name, $limit = 0, $path = '/', $domain = null, $secure = null);
 
     /**
-     * Prevent hijackers from hijacking a session.
-     */
-    public function preventHijacking();
-
-    /**
      * Updating current session ID with a new one.
      * 
      * @return bool if succeeded
