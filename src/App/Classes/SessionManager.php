@@ -6,7 +6,7 @@ use App\Interfaces\SessionManagerInterface;
 
 class SessionManager implements SessionManagerInterface {
 
-    private $timeout_duration = 1800;
+    private $timeoutDuration = 1800;
 
     private $started = false;
 
