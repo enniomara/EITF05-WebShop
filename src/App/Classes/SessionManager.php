@@ -28,7 +28,10 @@ class SessionManager implements SessionManagerInterface{
         // ToDo: Check so that parameters are okay.
         if(isset($_SESSION['LAST_ACTIVITY']) && ($time - $_SESSION['LAST_ACTIVITY']) > self::timeout_duration){
             self::destroySession();
+            return false;
         }
+
+        return true;
     }
 
     public function destroySession(){
@@ -37,6 +40,6 @@ class SessionManager implements SessionManagerInterface{
         $_SESSION = array();
         session_unset();
         // Clear session from disk
-        session_destroy();
+        return session_destroy();
     }
 }
