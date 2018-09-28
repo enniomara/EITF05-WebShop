@@ -2,7 +2,7 @@
 
 namespace App\Classes;
 
-use App\Classes\DAO\ItemDAO;
+use App\Interfaces\DAO\ItemDAO;
 use App\Classes\Models\Item;
 
 class ItemService

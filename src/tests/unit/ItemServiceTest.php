@@ -2,7 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Classes\DAO\ItemDAO;
+use App\Classes\DAO\ItemMySQLDAO;
+use App\Interfaces\DAO\ItemDAO;
 use App\Classes\ItemService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +24,7 @@ class ItemServiceTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->itemDAOStub = $this->getMockBuilder(ItemDAO::class)
+        $this->itemDAOStub = $this->getMockBuilder(ItemMySQLDAO::class)
             ->disableOriginalConstructor()
             ->getMock();
 
