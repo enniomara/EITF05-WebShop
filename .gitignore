@@ -22,6 +22,7 @@ tags
 server/ssl.crt
 server/ssl.key
 
+
 src/vendor
 
 # Created by https://www.gitignore.io/api/phpstorm+all,visualstudiocode
@@ -34,6 +35,7 @@ src/vendor
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+
  # Generated files
 .idea/**/contentModel.xml
  # Sensitive or high-churn files
@@ -44,6 +46,7 @@ src/vendor
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
+
  # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
@@ -54,6 +57,7 @@ src/vendor
 # .idea/modules.xml
 # .idea/*.iml
 # .idea/modules
+
  # CMake
 cmake-build-*/
  # Mongo Explorer plugin
@@ -73,6 +77,7 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
  # Editor-based Rest Client
 .idea/httpRequests
  ### PhpStorm+all Patch ###
@@ -90,4 +95,5 @@ modules.xml
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
  # End of https://www.gitignore.io/api/phpstorm+all,visualstudiocode
