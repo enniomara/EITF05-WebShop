@@ -8,7 +8,7 @@ try {
     $session = new SessionManager();
 
     //Starting session
-    $session->startSession('Test');
+    $session->start('Test');
 
     $items = [];
     foreach ($databaseConnection->query('SELECT * from users') as $row) {
