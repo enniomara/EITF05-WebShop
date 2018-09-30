@@ -2,18 +2,18 @@
 
 namespace App\Classes;
 
-use App\Interfaces\ServiceInterface;
+use App\Interfaces\DAO\UserDAO;
 
-class UserService implements ServiceInterface
+class UserService
 {
     /**
-     * @var \PDO
+     * @var UserDAO
      */
-    private $databaseConnection;
+    private $userDAO;
 
-    public function __construct(\PDO $databaseConnection)
+    public function __construct(UserDAO $userDAO)
     {
-        $this->databaseConnection = $databaseConnection;
+        $this->userDAO = $userDAO;
     }
 
     /**
@@ -27,16 +27,10 @@ class UserService implements ServiceInterface
         /** Validate credentials */
 
         /** Hash password */
-        $hashedPassword = (new PasswordService())->hash($password);
+        $hashedPassword = PasswordService::hash($password);
 
         /** Check against database */
-        $stmt = $this->databaseConnection->prepare('select username from users where username = ? AND password = ?');
-        $stmt->execute([
-            $username,
-            $hashedPassword
-        ]);
-        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
+        $result = $this->userDAO->findByUsernameAndPassword($username, $hashedPassword);
         if (empty($result)) {
             throw new \InvalidArgumentException('Incorrect authentication');
         }
@@ -59,12 +53,12 @@ class UserService implements ServiceInterface
 // Mocked version of password service. Swap with real one when it is implemented
 class PasswordService implements \App\Interfaces\PasswordServiceInterface
 {
-    public function hash(string $password): string
+    public static function hash(string $password): string
     {
         return $password;
     }
 
-    public function isValid(string $password): bool
+    public static function isValid(string $password): bool
     {
         return true;
     }
