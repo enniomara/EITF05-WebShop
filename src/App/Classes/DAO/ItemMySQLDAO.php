@@ -2,7 +2,9 @@
 
 namespace App\Classes\DAO;
 
-class ItemDAO
+use App\Interfaces\DAO\ItemDAO;
+
+class ItemMySQLDAO implements ItemDAO
 {
     /**
      * @var \PDO
@@ -14,6 +16,9 @@ class ItemDAO
         $this->databaseConnection = $databaseConnection;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function findAllItems(): array
     {
         $stmt = $this->databaseConnection->prepare('select id, name, price from items');
@@ -21,6 +26,9 @@ class ItemDAO
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function findAllByIds(array $ids): array
     {
         if (empty($ids)) {
