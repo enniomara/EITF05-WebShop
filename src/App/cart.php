@@ -1,11 +1,11 @@
 <?php
 
 use App\Classes\Cart;
-use App\Classes\DAO\ItemDAO;
+use App\Classes\DAO\ItemMySQLDAO;
 use App\Classes\Models\Item;
 use App\Classes\ItemService;
 
-$itemDAO = new ItemDAO($databaseConnection);
+$itemDAO = new ItemMySQLDAO($databaseConnection);
 $itemserv = new ItemService($itemDAO);
 $the_cart = new cart();
 
@@ -59,6 +59,18 @@ echo'
       <th>Totalsumma:</th>
       <th>'.$the_cart->calculateTotalPrice().' kr </th>
     </tr>';
+
+
+    echo'
+        <tr>
+          <th></th>
+          <td></td>
+          <th></th>
+          <th><input class="btn btn-primary" type="submit" value="Buy Items"></th>
+        </tr>';
+
+
+
 echo "</table>";
 
 

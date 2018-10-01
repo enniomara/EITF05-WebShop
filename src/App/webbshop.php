@@ -7,8 +7,8 @@
 //$sql_items = $db->query($sql);
 
 use App\Classes\ItemService;
-use App\Classes\DAO\ItemDAO;
-$itemDAO = new ItemDAO($databaseConnection);
+use App\Classes\DAO\ItemMySQLDAO;
+$itemDAO = new ItemMySQLDAO($databaseConnection);
 $itemserv =new ItemService($itemDAO);
 $sql_items = $itemserv->findAllItems();
 
@@ -41,6 +41,7 @@ foreach ($sql_items as $row) {
             <input type="hidden" name="id" value="',$row->getId(),'">
             <input type="number" min="0" class="form-control"  name="',$row->getId(),'" placeholder="Antal">
             <br>
+            <input class="btn btn-primary" type="submit" value="Add items to cart">
 
           </div>
 
@@ -52,8 +53,6 @@ foreach ($sql_items as $row) {
 // -------- Ending Container for products ------------
 echo '
 </div>
-<center><input class="btn btn-primary btn-lg btn-block" type="submit" value="Add items to cart"></center>
-<br>
 </form>
 </div>';
 ?>
