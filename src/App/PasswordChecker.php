@@ -1,20 +1,23 @@
 <?php
-	
-	Class PasswordChecker{
-		private $password;
-		
-		public function __construct($string){
-			$this -> password = $string;	
-		}
-		
+	Class PasswordChecker implements PasswordServiceInterface{
+        // return hash of password
+        public static function hash($password){
+            return password_hash($password, PASSWORD_BCRYPT);
+        }
+        
 		// Check if password is valid
-		public function checkIfValid($password){
-			if(checkForLetter($password) && checkForNumber($password) && checkForSpecialChar($password){
+		public static function isValid($password){
+			if(checkForLetter($password) && checkForNumber($password) && checkForSpecialChar($password) && checkSymbolLength($password)){
 				return checkNotCommon($password);
 				}
 			return false;
 		}	
 		
+        // Check if password is aleast 7 in symbol lenght
+        private function checkSymbolLenght($password){
+            return preg_match();
+        }
+               
 		// Check if password contains upper case letters
 		private function checkForUpperCase($password) {
 			return preg_match( '/[A-Z]/', $string );
