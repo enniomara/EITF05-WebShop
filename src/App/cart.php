@@ -1,21 +1,40 @@
 <?php
-#// TODO: DB-connection needs to be updated to same as index.php
-$db = new PDO('mysql:host=database;dbname=webshop', 'devuser', 'devpass');
-//Selecting the sql table
-$sql= "SELECT * FROM orderItems INNER JOIN items ON orderItems.itemId=items.id WHERE orderItems.orderId='1'";
-$sql_items = $db->query($sql);
 
-// -------- Rendering Header ------------
-echo '<header class="jumbotron my-4">
-<h1 class="display-1"><center> Your Cart </center></h1>
-</header>';
+use App\Classes\Cart;
+use App\Classes\DAO\ItemDAO;
+use App\Classes\Models\Item;
+use App\Classes\ItemService;
 
-// -------- Ordertable head------------
+$itemDAO = new ItemDAO($databaseConnection);
+$itemserv = new ItemService($itemDAO);
+$the_cart = new cart();
+
+// -------- Adding items to cart------------
+$id=0;
+foreach ($_POST as $key => $value) {
+  if ($id!=0) {
+      for ($i=0; $i < $value; $i++) {
+        $the_cart->addItem(current($itemserv->findAllByIds($key)));
+      }
+  }
+  $id=$id+1;
+}
+
+//// TODO: save cart in session
+
+
+//------------Cart rendering Rendering ----------------------
+$array;
+foreach ($the_cart->getItems() as $key) {
+  $array[]=$key->getId();
+}
+
+$printable_cart_array= array_count_values($array);
+
 echo'
 <table class="table">
   <thead>
     <tr>
-      <th>#</th>
       <th>Produkt</th>
       <th>Antal</th>
       <th>kr/st</th>
@@ -24,33 +43,27 @@ echo'
   </thead>
   <tbody>';
 
-// -------- Ordertable rendering------------
-$total_sum=0; // Order totalsum varible
-
-//Order row rendering
-foreach ($sql_items as $row) {
-$row_sum= $row[amount] * $row[price]; //Row nettsum
-echo"
-    <tr>
-      <th>$row[itemId]</th>
-      <td>$row[name]</td>
-      <td>$row[amount]</td>
-      <td>$row[price] kr</td>
-      <td>$row_sum kr</td>
-    </tr>";
-$total_sum = $total_sum + $row_sum; // adding each row nettsum to the order totalsum
+foreach ($printable_cart_array as $key=> $value) {
+  echo'
+      <tr>
+        <th>'.current($itemserv->findAllByIds($key))->getName().'</th>
+        <td>'.$value.' st</td>
+        <td>'.current($itemserv->findAllByIds($key))->getPrice().' kr</td>
+        <td>'.current($itemserv->findAllByIds($key))->getPrice()*$value.' kr </td>
+      </tr>';
 }
+echo'
+    <tr>
+      <th></th>
+      <td></td>
+      <th>Totalsumma:</th>
+      <th>'.$the_cart->calculateTotalPrice().' kr </th>
+    </tr>';
+echo "</table>";
 
-// Rendering the order totalsum
-echo"
-  <tr>
-    <th></th>
-    <td></td>
-    <td></td>
-    <th>Summa:</th>
-    <td>$total_sum kr</td>
-  </tr>
-  </tbody>
-</table>";
+
+
+
+
 
 ?>

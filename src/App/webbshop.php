@@ -21,7 +21,7 @@ echo '<header class="jumbotron my-4">
 
 // -------- Rendering Container for products ------------
 echo '<div class="container">
-  <form action="cart.php" method="post">
+  <form action="your_cart.php" method="post">
   <div class="row text-center">';
 
 
@@ -37,9 +37,9 @@ foreach ($sql_items as $row) {
             <h3 class="card-title">',$row->getName(),'</h3>
             <h4>',$row->getPrice(),'kr</h4>
            </div>
-
           <div class="card-footer">
-            <input type="number" min="0" class="form-control" id="',$row->getId(),'" placeholder="Antal">
+            <input type="hidden" name="id" value="',$row->getId(),'">
+            <input type="number" min="0" class="form-control"  name="',$row->getId(),'" placeholder="Antal">
             <br>
 
           </div>

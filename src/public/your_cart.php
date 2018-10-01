@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php
+  include('../App/global.php');
   include('../App/components.php');
  ?>
 
@@ -15,6 +16,10 @@
       //<!-- Navbar -->
       navbar();
       //<!-- The cart -->
+      echo '<header class="jumbotron my-4">
+      <h1 class="display-1"><center> Your Cart </center></h1>
+      </header>';
+      //print_r($_POST);
       include('../App/cart.php');
       //<!-- Footer -->
       footer();
