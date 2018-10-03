@@ -7,30 +7,41 @@ use App\Classes\Models\Item;
 class Cart
 {
     /**
+     * Variable with all items stored in a card.
+     * The format of the array is
+     * ```
+     * [
+     *  $itemId => [
+     *    'item' => $itemInstance,
+     *    'amount' => $amountAsInt
+     *  ]
+     * ]
+     * ```
      * @var Item[]
      */
     private $cartItems = [];
 
     /**
      * @param Item $item
+     * @param int $amount Amount of $item instances to store
      */
-    public function addItem(Item $item): void
+    public function addItem(Item $item, int $amount = 1): void
     {
-        $this->cartItems[] = $item;
-    }
+        if ($amount <= 0) {
+            throw new \InvalidArgumentException('Amount must be greater than 0');
+        }
 
-    /**
-     * @param Item[] $items
-     */
-    public function setItems(array $items): void
-    {
-        // Verify that all sent values in array are Items
-        $this->cartItems = array_filter($items, function ($item) {
-            if (!($item instanceof Item)) {
-                throw new \InvalidArgumentException('Sent in array contains elements that are not Items.');
-            }
-            return true;
-        });
+        // If this item has not been saved before, save it now with $amount
+        if (false === array_key_exists($item->getId(), $this->cartItems)) {
+            $this->cartItems[$item->getId()] = [
+                'amount' => $amount,
+                'item' => $item,
+            ];
+            return;
+        }
+
+        // Increase stored amount with $amount
+        $this->cartItems[$item->getId()]['amount'] += $amount;
     }
 
     /**
@@ -48,8 +59,9 @@ class Cart
     {
         $total = 0.0;
 
-        foreach ($this->cartItems as $item) {
-            $total += $item->getPrice();
+        foreach ($this->cartItems as $itemArray) {
+            $itemAmount = $itemArray['amount'];
+            $total += $itemArray['item']->getPrice() * $itemAmount;
         }
 
         return (float)$total;
