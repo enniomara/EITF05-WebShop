@@ -79,7 +79,19 @@ class SessionManager implements SessionManagerInterface {
     public function checkIfUserSet(): bool{
         return isset($_SESSION['USER_ID']);
     }
-    
+
+    /**
+     * Get user for this session
+     * 
+     * @return User
+     */
+    public function getUser(){
+        if(!$this->checkIfUserSet()){
+            return NULL;
+        }
+        return $_SESSION['USER_ID'];
+    }
+
     /**
      * @inheritdoc
      */
