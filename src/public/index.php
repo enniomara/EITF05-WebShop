@@ -8,13 +8,17 @@ try {
     $session = new SessionManager();
 
     //Starting session
-    $session->start('Test');
+    try{
+        $session->start();
+    } catch(Exception $e){
+        echo $e;
+    }
 
     $items = [];
     foreach ($databaseConnection->query('SELECT * from users') as $row) {
         $items[] = $row;
     }
-    
+
     echo '<pre>';
     print_r($items);
     echo '</pre>';
