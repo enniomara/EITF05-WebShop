@@ -9,6 +9,9 @@ interface SessionManagerInterface {
 
     /**
      * For easies starting a session and creating a cookie.
+     * 
+     * @return bool if session was created
+     * @throws Exception if session somehow didn't start
      */
     public function start();
 
