@@ -11,7 +11,7 @@ class SessionManager implements SessionManagerInterface {
     /**
      * @inheritdoc
      */
-    public function start() {
+    public function start(): bool {
         // Checking if session is allowed to start or if its already running
         if(session_status() == PHP_SESSION_DISABLED || session_status() == PHP_SESSION_ACTIVE){
             return false;
@@ -48,14 +48,14 @@ class SessionManager implements SessionManagerInterface {
     /**
      * @inheritdoc
      */
-    public function regenerate() {
+    public function regenerate(): bool {
         return session_regenerate_id();
     }
 
     /**
      * @inheritdoc
      */
-    public function validate() {
+    public function validate(): bool {
         // ToDo: Check so that parameters are okay.
         $time = $_SERVER['REQUEST_TIME'];
         if ( isset( $_SESSION['LAST_ACTIVITY'] ) && ( $time - $_SESSION['LAST_ACTIVITY'] ) > $this->timeoutDuration ) {
@@ -67,7 +67,7 @@ class SessionManager implements SessionManagerInterface {
     /**
      * @inheritdoc
      */
-    public function destroy() {
+    public function destroy(): bool {
         // Clear session from globals
         unset($_COOKIE['PHPSESSID']);
         // empty value and expiration one hour before
