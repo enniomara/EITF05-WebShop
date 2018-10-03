@@ -46,6 +46,41 @@ class SessionManager implements SessionManagerInterface {
     }
 
     /**
+     * Add a user to the session.
+     * 
+     * @param 
+     * @return bool if user where added to session.
+     */
+    public function setUser($id): bool{
+        if($this->checkIfUserSet()) return false;
+
+        $_SESSION['USER_ID'] = $id;
+        return true;
+    }
+
+    /**
+     * Add cart to session
+     * 
+     * @param Cart The cart with items
+     * @return bool If it was added.
+     */
+    public function addCart(Cart $cart): bool{
+        if(!$this->checkIfUserSet()) return false;
+
+        $_SESSION['CART'] = $cart;
+        return true;
+    }
+
+    /**
+     * Checking if user is already set.
+     * 
+     * @return bool if user is set
+     */
+    public function checkIfUserSet(): bool{
+        return isset($_SESSION['USER_ID']);
+    }
+    
+    /**
      * @inheritdoc
      */
     public function regenerate(): bool {
