@@ -2,7 +2,9 @@
 
 namespace App\Classes\Models;
 
-class ItemCollection
+use App\Interfaces\Models\ItemCollectionInterface;
+
+class ItemCollection implements ItemCollectionInterface
 {
     /**
      * Variable with all items stored in a card.
@@ -20,8 +22,7 @@ class ItemCollection
     private $items = [];
 
     /**
-     * @param Item $item
-     * @param int $amount Amount of $item instances to store
+     * @inheritdoc
      */
     public function add(Item $item, int $amount = 1): void
     {
@@ -43,8 +44,7 @@ class ItemCollection
     }
 
     /**
-     * Removes an item from the collection.
-     * @param Item $item
+     * @inheritdoc
      */
     public function remove(Item $item): void
     {
@@ -53,15 +53,16 @@ class ItemCollection
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function contains(Item $item): bool
     {
         return array_key_exists($item->getId(), $this->items);
     }
 
     /**
-     * Get the amount of items stored in this collection.
-     * @param Item $item
-     * @return int
+     * @inheritdoc
      */
     public function getAmount(Item $item): int
     {
@@ -73,6 +74,9 @@ class ItemCollection
         return $this->items[$item->getId()]['amount'];
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getItems(): array
     {
         $items = [];
