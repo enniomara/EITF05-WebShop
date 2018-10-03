@@ -34,7 +34,7 @@ interface ItemCollectionInterface
 
     /**
      * Return an array with all items (no amount).
-     * @return array
+     * @return Item[]
      */
     public function getItems(): array;
 }
