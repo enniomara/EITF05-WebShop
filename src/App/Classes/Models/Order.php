@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Interfaces\Models;
+namespace App\Classes\Models;
 
-use App\Classes\Models\Item;
+use App\Interfaces\Models\ItemCollectionInterface;
 
 class Order
 {
@@ -16,39 +16,44 @@ class Order
     private $time;
 
     /**
-     * @var Item[]
+     * @var ItemCollectionInterface
      */
-    private $items;
+    private $itemCollection;
 
     /**
      * @param int $id
      * @param $time
+     * @param $ownerId
      */
-    public function __construct(int $id, $time)
+    public function __construct(int $id = 0, $time = 0, $ownerId = 0)
     {
         $this->id = $id;
+        $this->ownerId = $ownerId;
         $this->time = $time;
     }
 
     /**
-     * @param Item[] $items
+     * @param ItemCollectionInterface $itemCollection
      * @return Order
      */
-    public function setItems(array $items) {
+    public function setItemCollection(ItemCollectionInterface $itemCollection)
+    {
+        $this->itemCollection = $itemCollection;
         return $this;
     }
 
     /**
-     * @return Item[]
+     * @return ItemCollectionInterface
      */
-    public function getItems(){
-        return $this->items;
+    public function getItemCollection(): ItemCollectionInterface
+    {
+        return $this->itemCollection;
     }
 
     /**
      * @return int
      */
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id;
     }
