@@ -28,7 +28,7 @@ class Cart
     public function addItem(Item $item, int $amount = 1): void
     {
         if ($amount <= 0) {
-            throw new \InvalidArgumentException('Amount must be more than 0');
+            throw new \InvalidArgumentException('Amount must be greater than 0');
         }
 
         // If this item has not been saved before, save it now with $amount
