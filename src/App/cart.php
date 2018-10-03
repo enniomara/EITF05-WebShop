@@ -7,7 +7,7 @@ use App\Classes\ItemService;
 
 $itemDAO = new ItemMySQLDAO($databaseConnection);
 $itemserv = new ItemService($itemDAO);
-$the_cart = new cart();
+$the_cart = new Cart();
 
 // -------- Adding items to cart------------
 $id=0;

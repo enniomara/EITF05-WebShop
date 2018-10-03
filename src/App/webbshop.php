@@ -1,10 +1,5 @@
 
 <?php
-#// TODO: DB-connection needs to be updated to same as index.php
-//$db = new PDO('mysql:host=database;dbname=webshop', 'devuser', 'devpass');
-//Selecting the sql table
-//$sql= "SELECT id,name,price FROM items";
-//$sql_items = $db->query($sql);
 
 use App\Classes\ItemService;
 use App\Classes\DAO\ItemMySQLDAO;
