@@ -47,14 +47,22 @@ class OrderTest extends TestCase
 
     public function testGetId()
     {
-        $order = new Order(1, time(), 2);
+        $order = new Order(1, null, 2);
         $this->assertEquals(1, $order->getId());
     }
 
     public function testGetTime()
     {
-        $time = time();
-        $order = new Order(1, $time, 2);
-        $this->assertEquals($time, $order->getTime());
+        $order = new Order(1, 2);
+        $this->assertNull($order->getTime());
+    }
+
+    /**
+     * Test setting order time to now
+     */
+    public function testSetTime() {
+        $time = new \DateTime();
+        $this->order->setTime($time);
+        $this->assertEquals($time, $this->order->getTime());
     }
 }

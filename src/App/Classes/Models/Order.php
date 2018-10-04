@@ -3,6 +3,7 @@
 namespace App\Classes\Models;
 
 use App\Interfaces\Models\ItemCollectionInterface;
+use DateTime;
 
 class Order
 {
@@ -13,7 +14,10 @@ class Order
 
     private $ownerId;
 
-    private $time;
+    /**
+     * @var DateTime Time of order
+     */
+    private $time = null;
 
     /**
      * @var ItemCollectionInterface
@@ -22,21 +26,21 @@ class Order
 
     /**
      * @param int $id
-     * @param $time
-     * @param $ownerId
+     * @param int $ownerId
      */
-    public function __construct(int $id = 0, $time = 0, $ownerId = 0)
+    public function __construct(int $id = 0, $ownerId = 0)
     {
         $this->id = $id;
         $this->ownerId = $ownerId;
-        $this->time = $time;
+
+        $this->itemCollection = new ItemCollection();
     }
 
     /**
      * @param ItemCollectionInterface $itemCollection
      * @return Order
      */
-    public function setItemCollection(ItemCollectionInterface $itemCollection)
+    public function setItemCollection(ItemCollectionInterface $itemCollection): Order
     {
         $this->itemCollection = $itemCollection;
         return $this;
@@ -59,10 +63,24 @@ class Order
     }
 
     /**
-     * @return mixed
+     * @return DateTime
      */
-    public function getTime()
+    public function getTime(): DateTime
     {
         return $this->time;
+    }
+
+    /**
+     * @param DateTime|null $time
+     */
+    public function setTime(DateTime $time = null)
+    {
+        $this->time = $time;
+        // If time is not set set it to now
+        if (!isset($time)) {
+            $this->time = new DateTime();
+        } else {
+            $this->time = $time;
+        }
     }
 }
