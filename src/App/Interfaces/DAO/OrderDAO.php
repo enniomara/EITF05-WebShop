@@ -2,5 +2,14 @@
 
 namespace App\Interfaces\DAO;
 
-interface OrderDAO {
+use App\Classes\Models\Order;
+
+interface OrderDAO
+{
+    /**
+     * Save an order to the database.
+     *
+     * @param Order $order
+     */
+    public function save(Order $order): void;
 }
