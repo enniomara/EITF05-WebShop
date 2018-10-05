@@ -26,12 +26,12 @@ class SessionManagerTest extends TestCase{
     }
 
     public function testCheckIfUserSet(): void {
-        $this->assertFalse($this->session->checkIfUserSet());
+        $this->assertFalse($this->session->isUserSet());
 
         $userId = 1234567;
         $this->session->setUser($userId);
 
-        $this->assertTrue($this->session->checkIfUserSet());
+        $this->assertTrue($this->session->isUserSet());
     }
 
     public function testSetUser(): void{

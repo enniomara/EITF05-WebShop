@@ -70,7 +70,7 @@ class SessionManager implements SessionManagerInterface {
      * 
      * @return bool if user is set
      */
-    public function checkIfUserSet(): bool{
+    public function isUserSet(): bool{
         return isset($_SESSION['authenticatedUser']['userId']);
     }
 
@@ -87,7 +87,7 @@ class SessionManager implements SessionManagerInterface {
      * @return array
      */
     public function getUser(): array{
-        if(!$this->checkIfUserSet()){
+        if(!$this->isUserSet()){
             return null;
         }
         return $_SESSION['authenticatedUser'];
