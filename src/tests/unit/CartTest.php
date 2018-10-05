@@ -19,35 +19,56 @@ class CartTest extends TestCase
         $this->cart = new Cart();
     }
 
-    public function testAddItem(): void
+    public function testAddNewItemWithNoAmount(): void
     {
         $item = new Item(1, "test", 20);
         $this->cart->addItem($item);
 
-        $this->assertEquals($this->cart->getItems(), [$item]);
+        $this->assertEquals([
+            $item->getId() => [
+                'item' => $item,
+                'amount' => 1
+            ]
+        ], $this->cart->getItems());
     }
 
-    public function testSetItems(): void
+    public function testAddNewItemWithAmount(): void
     {
-        $items = [
-            new Item(1, "test", 20),
-            new Item(2, "test", 20)
-        ];
+        $item = new Item(1, "test", 20);
+        $this->cart->addItem($item, 5);
 
-        // Add one non-relevant item to make sure it is overwritten
-        $this->cart->addItem($items[0]);
-
-        $this->cart->setItems($items);
-        $this->assertEquals($items, $this->cart->getItems());
+        $this->assertEquals([
+            $item->getId() => [
+                'item' => $item,
+                'amount' => 5
+            ]
+        ], $this->cart->getItems());
     }
 
-    public function testSetItemsThatAreNotItems(): void
+    public function testAddItemWithNegativeAmount(): void
     {
+        $item = new Item(1, "test", 20);
+
         $this->expectException(\InvalidArgumentException::class);
-        $this->cart->setItems([
-            new Item(1, "test", 20),
-            'notAnItems'
-        ]);
+        $this->cart->addItem($item, -4);
+    }
+
+    /**
+     * If an item exists, it's amount must be increased
+     */
+    public function testAddExistingItem(): void
+    {
+        $item = new Item(1, "test", 20);
+        $this->cart->addItem($item, 5);
+
+        // Here we try to add the same item. The amount should be updated
+        $this->cart->addItem($item, 4);
+        $this->assertEquals([
+            $item->getId() => [
+                'item' => $item,
+                'amount' => 9
+            ]
+        ], $this->cart->getItems());
     }
 
     public function testCalculateTotalPriceEmptyCart(): void
@@ -57,10 +78,31 @@ class CartTest extends TestCase
 
     public function testCalculateTotalPrice(): void
     {
-        $this->cart->setItems([
-            new Item(1, "test", 7),
-            new Item(2, "test", 8)
-        ]);
-        $this->assertEquals(15, $this->cart->calculateTotalPrice());
+        $item1 = new Item(1, "test", 7);
+        $item2 = new Item(2, "test", 8);
+
+        $this->cart->addItem($item1, 2);
+        $this->cart->addItem($item2, 5);
+        $this->assertEquals($item1->getPrice() * 2 + $item2->getPrice() * 5, $this->cart->calculateTotalPrice());
+    }
+
+    public function testGetItems()
+    {
+        $item1 = new Item(1, "test", 7);
+        $item2 = new Item(2, "test", 8);
+
+        $this->cart->addItem($item1, 2);
+        $this->cart->addItem($item2, 5);
+
+        $this->assertEquals([
+            $item1->getId() => [
+                'item' => $item1,
+                'amount' => 2
+            ],
+            $item2->getId() => [
+                'item' => $item2,
+                'amount' => 5
+            ]
+        ], $this->cart->getItems());
     }
 }
