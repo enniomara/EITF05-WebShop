@@ -25,27 +25,19 @@ class SessionManagerTest extends TestCase{
         $this->cart = new Cart();
     }
 
-    public function testSetUser(): void{
-        $userId = 1234567;
-        $this->session->setUser($userId);
-
-        $this->assertEquals($userId, $this->session->getUser()['userId']);
-    }
-
     public function testCheckIfUserSet(): void {
+        $this->assertFalse($this->session->checkIfUserSet());
+
         $userId = 1234567;
         $this->session->setUser($userId);
 
         $this->assertTrue($this->session->checkIfUserSet());
     }
 
-    public function testSetCart(): void {
-        $item = new Item(1, "test", 20);
-        $this->cart->addItem($item);
+    public function testSetUser(): void{
+        $userId = 1234567;
+        $this->session->setUser($userId);
 
-        $this->session->setCart($this->cart);
-
-        $this->assertEquals($this->session->getCart()->getItems(), [$item]);
+        $this->assertEquals($userId, $this->session->getUser()['userId']);
     }
-
 }
