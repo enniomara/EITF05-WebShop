@@ -61,7 +61,6 @@ class SessionManager implements SessionManagerInterface {
      */
     public function setCart(Cart $cart){
         $_SESSION['CART'] = $cart;
-        return true;
     }
 
     /**
@@ -83,6 +82,15 @@ class SessionManager implements SessionManagerInterface {
             return null;
         }
         return $_SESSION['authenticatedUser'];
+    }
+
+    /**
+     * Get the cart for this session
+     * 
+     * @return Cart The set cart
+     */
+    public function getCart(): Cart{
+        return $_SESSION['CART'];
     }
 
     /**
