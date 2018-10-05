@@ -46,6 +46,63 @@ class SessionManager implements SessionManagerInterface {
     }
 
     /**
+     * Set a user to the session.
+     * 
+     * @param $id
+     */
+    public function setUser($id){
+        $_SESSION['authenticatedUser'] = [
+            'userId' => $id
+        ];
+    }
+
+    /**
+     * Set cart to session
+     * 
+     * @param Cart The cart with items
+     */
+    public function setCart(Cart $cart){
+        $_SESSION['CART'] = $cart;
+    }
+
+    /**
+     * Checking if user is already set.
+     * 
+     * @return bool if user is set
+     */
+    public function isUserSet(): bool{
+        return isset($_SESSION['authenticatedUser']['userId']);
+    }
+
+    /**
+     * Get user for this session
+     * 
+     * The format of the array is
+     * ```
+     * [
+     *  'userId' => $id
+     * ]
+     * ```
+     * 
+     * @return array
+     */
+    public function getUser(): array{
+        if(!$this->isUserSet()){
+            return null;
+        }
+        return $_SESSION['authenticatedUser'];
+    }
+
+    /**
+     * Get the cart for this session
+     * 
+     * @return Cart The set cart
+     */
+    public function getCart(): Cart{
+        return $_SESSION['CART'];
+    }
+
+    /**
      * @inheritdoc
      */
     public function regenerate(): bool {
