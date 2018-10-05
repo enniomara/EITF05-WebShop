@@ -47,7 +47,7 @@ class OrderTest extends TestCase
 
     public function testGetId()
     {
-        $order = new Order(1, null, 2);
+        $order = new Order(1, 2);
         $this->assertEquals(1, $order->getId());
     }
 
@@ -64,5 +64,10 @@ class OrderTest extends TestCase
         $time = new \DateTime();
         $this->order->setTime($time);
         $this->assertEquals($time, $this->order->getTime());
+    }
+
+    public function testGetOwnerId() {
+        $order = new Order(1, "customOwnerId");
+        $this->assertEquals("customOwnerId", $order->getOwnerId());
     }
 }

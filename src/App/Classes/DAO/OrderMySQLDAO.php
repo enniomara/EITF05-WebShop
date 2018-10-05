@@ -48,9 +48,8 @@ class OrderMySQLDAO implements OrderDAO
     {
         $sql = 'INSERT INTO orders (username, time) VALUES (:username, :time)';
         $statement = $this->databaseConnection->prepare($sql);
-        $test = 'test';
-        $statement->bindParam(':username', $test, \PDO::PARAM_STR);
-        $statement->bindValue(':time', $order->getTime(), \PDO::PARAM_STR);
+        $statement->bindValue(':username', $order->getOwnerId(), \PDO::PARAM_STR);
+        $statement->bindValue(':time', $order->getTime()->format('Y-m-d H:i:s'), \PDO::PARAM_STR);
         return $statement;
     }
 

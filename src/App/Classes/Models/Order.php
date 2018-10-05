@@ -12,7 +12,7 @@ class Order
      */
     private $id;
 
-    private $ownerId;
+    private $ownerId = null;
 
     /**
      * @var DateTime Time of order
@@ -28,7 +28,7 @@ class Order
      * @param int $id
      * @param int $ownerId
      */
-    public function __construct(int $id = 0, $ownerId = 0)
+    public function __construct(int $id = 0, $ownerId = -1)
     {
         $this->id = $id;
         $this->ownerId = $ownerId;
@@ -63,9 +63,9 @@ class Order
     }
 
     /**
-     * @return DateTime
+     * @return DateTime|null
      */
-    public function getTime(): DateTime
+    public function getTime()
     {
         return $this->time;
     }
@@ -82,5 +82,9 @@ class Order
         } else {
             $this->time = $time;
         }
+    }
+
+    public function getOwnerId() {
+        return $this->ownerId;
     }
 }
