@@ -3,6 +3,8 @@
 namespace App\Classes;
 
 use App\Classes\Models\Item;
+use App\Classes\Models\ItemCollection;
+use App\Interfaces\Models\ItemCollectionInterface;
 
 class Cart
 {
@@ -17,9 +19,14 @@ class Cart
      *  ]
      * ]
      * ```
-     * @var Item[]
+     * @var ItemCollectionInterface
      */
-    private $cartItems = [];
+    private $cartItems;
+
+    public function __construct()
+    {
+        $this->cartItems = new ItemCollection();
+    }
 
     /**
      * @param Item $item
@@ -31,17 +38,7 @@ class Cart
             throw new \InvalidArgumentException('Amount must be greater than 0');
         }
 
-        // If this item has not been saved before, save it now with $amount
-        if (false === array_key_exists($item->getId(), $this->cartItems)) {
-            $this->cartItems[$item->getId()] = [
-                'amount' => $amount,
-                'item' => $item,
-            ];
-            return;
-        }
-
-        // Increase stored amount with $amount
-        $this->cartItems[$item->getId()]['amount'] += $amount;
+        $this->cartItems->add($item, $amount);
     }
 
     /**
@@ -49,7 +46,7 @@ class Cart
      */
     public function getItems(): array
     {
-        return $this->cartItems;
+        return $this->cartItems->getItems();
     }
 
     /**
@@ -59,9 +56,9 @@ class Cart
     {
         $total = 0.0;
 
-        foreach ($this->cartItems as $itemArray) {
-            $itemAmount = $itemArray['amount'];
-            $total += $itemArray['item']->getPrice() * $itemAmount;
+        foreach ($this->cartItems->getItems() as $item) {
+            $itemAmount = $this->cartItems->getAmount($item);
+            $total += $item->getPrice() * $itemAmount;
         }
 
         return (float)$total;
