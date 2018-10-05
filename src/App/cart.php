@@ -4,33 +4,41 @@ use App\Classes\Cart;
 use App\Classes\DAO\ItemMySQLDAO;
 use App\Classes\Models\Item;
 use App\Classes\ItemService;
+use App\Classes\DAO\OrderMySQLDAO;
+use App\Classes\Models\Order;
+use App\Classes\OrderService;
+use App\Classes\SessionManager;
 
 $itemDAO = new ItemMySQLDAO($databaseConnection);
 $itemserv = new ItemService($itemDAO);
 $the_cart = new Cart();
 
+
+
 // -------- Adding items to cart------------
+
+$array = array_keys($_POST);
+array_shift($array);
+
+if (sizeof($array)>0) {
+$items = $itemserv->findAllByIds(...$array);
+
 $id=0;
-foreach ($_POST as $key => $value) {
-  if ($id!=0) {
-      for ($i=0; $i < $value; $i++) {
-        $the_cart->addItem(current($itemserv->findAllByIds($key)));
-      }
-  }
+foreach ($_POST as $itemid => $amount) {
+  if ($id!=0 && $amount!=0) {
+    $the_cart->addItem($items[$id],intval($amount));
+ }
   $id=$id+1;
 }
+}
 
-//// TODO: save cart in session
+// -------- Save cart in session------------
+
+//$_SESSION->addCart($the_cart);
 
 
 //------------Cart rendering Rendering ----------------------
-$array;
-foreach ($the_cart->getItems() as $key) {
-  $array[]=$key->getId();
-}
-
-$printable_cart_array= array_count_values($array);
-
+$the_cart_items = $the_cart->getItems();
 echo'
 <table class="table">
   <thead>
@@ -43,39 +51,34 @@ echo'
   </thead>
   <tbody>';
 
-foreach ($printable_cart_array as $key=> $value) {
+foreach ($the_cart_items as $item) {
   echo'
       <tr>
-        <th>'.current($itemserv->findAllByIds($key))->getName().'</th>
-        <td>'.$value.' st</td>
-        <td>'.current($itemserv->findAllByIds($key))->getPrice().' kr</td>
-        <td>'.current($itemserv->findAllByIds($key))->getPrice()*$value.' kr </td>
+        <th>'.$item->getName().'</th>
+        <td>'.$the_cart->getAmount($item).'st</td>
+        <td>'.$item->getPrice().' kr</td>
+        <td>'.$item->getPrice()*$the_cart->getAmount($item).' kr </td>
       </tr>';
 }
+
+/* Unshure if buttom below works as intended */
 echo'
-    <tr>
-      <th></th>
-      <td></td>
-      <th>Totalsumma:</th>
-      <th>'.$the_cart->calculateTotalPrice().' kr </th>
-    </tr>';
+      <tr>
+        <th></th>
+        <td></td>
+        <th>Totalsumma:</th>
+        <th>'.$the_cart->calculateTotalPrice().' kr </th>
+      </tr>
+      <tr>
+        <th></th>
+        <td></td>
+        <th></th>
+        <th><a href="/receipt.php"><input class="btn btn-primary" type="submit" value="Buy Items"></a></th>
+      </tr>
+</table>';
 
 
-    echo'
-        <tr>
-          <th></th>
-          <td></td>
-          <th></th>
-          <th><input class="btn btn-primary" type="submit" value="Buy Items"></th>
-        </tr>';
-
-
-
-echo "</table>";
-
-
-
-
+}
 
 
 ?>

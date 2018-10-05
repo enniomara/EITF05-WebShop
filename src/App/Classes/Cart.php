@@ -50,6 +50,15 @@ class Cart
     }
 
     /**
+     * returns amount
+     */
+    public function getAmount(Item $item): int
+    {
+      return $this->cartItems->getAmount($item);
+    }
+
+
+    /**
      * Calculate total price of all items on cart.
      */
     public function calculateTotalPrice(): float
