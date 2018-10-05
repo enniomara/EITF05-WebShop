@@ -46,29 +46,23 @@ class SessionManager implements SessionManagerInterface {
     }
 
     /**
-     * Add a user to the session.
+     * Set a user to the session.
      * 
-     * @param 
-     * @return bool if user where added to session.
+     * @param $id
      */
-    public function setUser($id): bool{
-        if($this->checkIfUserSet()) return false;
-
-        $_SESSION['USER_ID'] = $id;
-        return true;
+    public function setUser($id){
+        $_SESSION['authenticatedUser'] = [
+            'userId' => $id
+        ];
     }
 
     /**
-     * Add cart to session
+     * Set cart to session
      * 
      * @param Cart The cart with items
-     * @return bool If it was added.
      */
-    public function addCart(Cart $cart): bool{
-        if(!$this->checkIfUserSet()) return false;
-
+    public function setCart(Cart $cart){
         $_SESSION['CART'] = $cart;
-        return true;
     }
 
     /**
@@ -76,20 +70,36 @@ class SessionManager implements SessionManagerInterface {
      * 
      * @return bool if user is set
      */
-    public function checkIfUserSet(): bool{
-        return isset($_SESSION['USER_ID']);
+    public function isUserSet(): bool{
+        return isset($_SESSION['authenticatedUser']['userId']);
     }
 
     /**
      * Get user for this session
      * 
-     * @return User
+     * The format of the array is
+     * ```
+     * [
+     *  'userId' => $id
+     * ]
+     * ```
+     * 
+     * @return array
      */
-    public function getUser(){
-        if(!$this->checkIfUserSet()){
-            return NULL;
+    public function getUser(): array{
+        if(!$this->isUserSet()){
+            return null;
         }
-        return $_SESSION['USER_ID'];
+        return $_SESSION['authenticatedUser'];
+    }
+
+    /**
+     * Get the cart for this session
+     * 
+     * @return Cart The set cart
+     */
+    public function getCart(): Cart{
+        return $_SESSION['CART'];
     }
 
     /**
