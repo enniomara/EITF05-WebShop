@@ -47,6 +47,8 @@ class SessionManager implements SessionManagerInterface {
 
     /**
      * Set a user to the session.
+     * 
+     * @param $id
      */
     public function setUser($id){
         $_SESSION['authenticatedUser'] = [
@@ -74,6 +76,13 @@ class SessionManager implements SessionManagerInterface {
 
     /**
      * Get user for this session
+     * 
+     * The format of the array is
+     * ```
+     * [
+     *  'userId' => $id
+     * ]
+     * ```
      * 
      * @return array
      */
