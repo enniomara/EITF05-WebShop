@@ -27,4 +27,28 @@ class UserMySQLDAO implements UserDAO {
         ]);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function create(string $username, string $password, string $address): string {
+        $sql = "INSERT INTO users(username, password, address) VALUES (:username, :password, :address)";
+        $stmt = $this->databaseConnection->prepare($sql);
+        $stmt->bindValue(':username', $username);
+        $stmt->bindValue(':password', $password);
+        $stmt->bindValue(':address', $address);
+
+        try {
+            $stmt->execute();
+        } catch (\PDOException $e) {
+            if ($e->getCode() == 23000) {
+                throw new \InvalidArgumentException('User already exists.');
+            }
+
+            throw $e;
+        }
+
+        return $username;
+    }
+
 }

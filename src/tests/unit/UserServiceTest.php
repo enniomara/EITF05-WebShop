@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Classes\DAO\UserMySQLDAO;
+use App\Classes\PasswordService;
 use App\Classes\UserService;
 use App\Interfaces\DAO\UserDAO;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -50,5 +51,27 @@ class UserServiceTest extends TestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->userService->login('username', 'password');
+    }
+
+    public function testCreate() {
+        $username = 'username';
+        $password = 'password';
+        $address = 'Lund';
+        $hashedPassword = PasswordService::hash($password);
+
+        $this->userDAOStub->expects($this->once())
+            ->method('create')
+            ->with($username, $hashedPassword, $address)
+            ->willReturn($username);
+
+        $returnValue = [$username];
+        $this->userDAOStub->expects($this->once())
+            ->method('findByUsernameAndPassword')
+            ->with($username, $hashedPassword)
+            ->willReturn($returnValue);
+
+        $response = $this->userService->create($username, $password, $address);
+        // Assert that the value is returned is the value retrieved from findByUsernameAndPassword
+        $this->assertEquals($returnValue, $response);
     }
 }

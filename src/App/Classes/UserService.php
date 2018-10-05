@@ -22,7 +22,7 @@ class UserService
      * @return bool If login was successful or not
      * @throws \InvalidArgumentException When authentication fails
      */
-    public function login(string $username, string $password) : bool
+    public function login(string $username, string $password): bool
     {
         /** Validate credentials */
 
@@ -40,13 +40,22 @@ class UserService
         return true;
     }
 
-    public function create(string $username, string $password)
+    /**
+     * Create a user
+     * @param string $username
+     * @param string $password
+     * @param string $address
+     * @return array
+     */
+    public function create(string $username, string $password, string $address)
     {
-        /** Validate username and password */
-        /** Validate username does not exist */
+        /** Validate credentials */
         /** Generate hash */
+        $hashedPassword = PasswordService::hash($password);
         /** Save to db */
+        $result = $this->userDAO->create($username, $password, $address);
         /** Return created user */
+        return $this->userDAO->findByUsernameAndPassword($result, $hashedPassword);
     }
 }
 
