@@ -40,6 +40,13 @@ class UserService
         return true;
     }
 
+    /**
+     * Create a user
+     * @param string $username
+     * @param string $password
+     * @param string $address
+     * @return array
+     */
     public function create(string $username, string $password, string $address)
     {
         /** Validate credentials */
