@@ -2,13 +2,16 @@
 
 namespace App\Interfaces\DAO;
 
-interface UserDAO {
+use App\Classes\Models\User;
+
+interface UserDAO
+{
     /**
      * @param string $username
      * @param string $password
-     * @return array Database row results.
+     * @return User|null The found user model.
      */
-    public function findByUsernameAndPassword(string $username, string $password) : array;
+    public function findOneByUsernameAndPassword(string $username, string $password): ?User;
 
     /**
      * Save a row in the users table.
