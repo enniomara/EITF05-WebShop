@@ -4,6 +4,7 @@ namespace App\Classes;
 
 use App\Classes\Models\User;
 use App\Interfaces\SessionManagerInterface;
+use Exception;
 
 class SessionManager implements SessionManagerInterface
 {
