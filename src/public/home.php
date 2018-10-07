@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php
-  include('../App/global.php');
+  require('../App/global.php');
   include('../App/components.php');
 
  ?>
