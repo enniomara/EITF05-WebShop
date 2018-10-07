@@ -7,8 +7,17 @@
 
 require_once __DIR__ . '/../App/autoload.php';
 
+use App\Classes\DAO\UserMySQLDAO;
 use App\Classes\DBConnection;
+use App\Classes\UserService;
 
 $databaseConnection = new DBConnection();
 $sessionManager = new \App\Classes\SessionManager();
 $sessionManager->start();
+
+$userService = new UserService(new UserMySQLDAO($databaseConnection), $sessionManager);
+
+$loggedInUser = null;
+if (null !== $sessionManager->getUser()) {
+    $loggedInUser = $userService->find($sessionManager->getUser()['userId']);
+}

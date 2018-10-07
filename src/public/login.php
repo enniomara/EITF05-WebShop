@@ -2,13 +2,9 @@
 
 require_once __DIR__ . '/../App/global.php';
 
-use App\Classes\DAO\UserMySQLDAO;
-use App\Classes\UserService;
 use App\Classes\View;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userDAO = new UserMySQLDAO($databaseConnection);
-    $userService = new UserService($userDAO, $sessionManager);
     // Handle case when login is submitted
     if (isset($_GET['action']) && $_GET['action'] === 'login') {
         if (isset($_POST['username']) && isset($_POST['password'])) {
