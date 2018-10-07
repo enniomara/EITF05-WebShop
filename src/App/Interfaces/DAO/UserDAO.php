@@ -14,6 +14,12 @@ interface UserDAO
     public function findOneByUsernameAndPassword(string $username, string $password): ?User;
 
     /**
+     * @param string $username
+     * @return User|null
+     */
+    public function findOneByUsername(string $username): ?User;
+
+    /**
      * Save a row in the users table.
      *
      * @param string $username
