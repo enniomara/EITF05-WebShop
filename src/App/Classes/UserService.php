@@ -49,6 +49,22 @@ class UserService
     }
 
     /**
+     * Finds a user from the database
+     *
+     * @param string $username
+     * @return User
+     */
+    public function find(string $username): User
+    {
+        $user = $this->userDAO->findOneByUsername($username);
+        if (null === $user) {
+            throw new \InvalidArgumentException("Could not find user with username `$username`");
+        }
+
+        return $user;
+    }
+
+    /**
      * Create a user
      * @param string $username
      * @param string $password

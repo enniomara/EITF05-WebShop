@@ -91,4 +91,26 @@ class UserServiceTest extends TestCase
         // Assert that the value is returned is the value retrieved from findByUsernameAndPassword
         $this->assertEquals($this->userModel, $response);
     }
+
+    public function testFind()
+    {
+        $this->userDAOStub->expects($this->once())
+            ->method('findOneByUsername')
+            ->with($this->userModel->getUsername())
+            ->willReturn($this->userModel);
+
+        $this->assertEquals($this->userModel, $this->userService->find($this->userModel->getUsername()));
+    }
+
+    public function testFindUserNotFound()
+    {
+        $this->userDAOStub->expects($this->once())
+            ->method('findOneByUsername')
+            ->with($this->userModel->getUsername())
+            ->willReturn(null);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Could not find user with username `{$this->userModel->getUsername()}`");
+        $this->userService->find($this->userModel->getUsername());
+    }
 }
