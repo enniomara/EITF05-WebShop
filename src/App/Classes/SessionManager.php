@@ -32,7 +32,7 @@ class SessionManager implements SessionManagerInterface {
                 throw new Exception("Unable to destroy the session.");
             }
         }
-        
+
         $this->setActivityTime();
 
         return true;
@@ -47,7 +47,7 @@ class SessionManager implements SessionManagerInterface {
 
     /**
      * Set a user to the session.
-     * 
+     *
      * @param $id
      */
     public function setUser($id){
@@ -58,7 +58,7 @@ class SessionManager implements SessionManagerInterface {
 
     /**
      * Set cart to session
-     * 
+     *
      * @param Cart The cart with items
      */
     public function setCart(Cart $cart){
@@ -67,7 +67,7 @@ class SessionManager implements SessionManagerInterface {
 
     /**
      * Checking if user is already set.
-     * 
+     *
      * @return bool if user is set
      */
     public function isUserSet(): bool{
@@ -76,14 +76,14 @@ class SessionManager implements SessionManagerInterface {
 
     /**
      * Get user for this session
-     * 
+     *
      * The format of the array is
      * ```
      * [
      *  'userId' => $id
      * ]
      * ```
-     * 
+     *
      * @return array
      */
     public function getUser(): array{
@@ -95,11 +95,14 @@ class SessionManager implements SessionManagerInterface {
 
     /**
      * Get the cart for this session
-     * 
+     *
      * @return Cart The set cart
      */
     public function getCart(): Cart{
+      if (isset($_SESSION['CART'])) {
         return $_SESSION['CART'];
+      }
+        return new Cart();
     }
 
     /**
@@ -129,7 +132,7 @@ class SessionManager implements SessionManagerInterface {
         unset($_COOKIE['PHPSESSID']);
         // empty value and expiration one hour before
         setcookie('PHPSESSID', '', time() - 3600);
-        
+
         session_unset();
         $_SESSION = [];
         // Clear session from disk

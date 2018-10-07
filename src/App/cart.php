@@ -11,21 +11,23 @@ use App\Classes\SessionManager;
 
 $itemDAO = new ItemMySQLDAO($databaseConnection);
 $itemserv = new ItemService($itemDAO);
+$Session = new SessionManager();
 $the_cart = new Cart();
 
+$Session->start();
 
+// -------- Adding Session cart if it exists------------
+$the_cart = $Session->getCart();
 
 // -------- Adding items to cart------------
-
 $array = array_keys($_POST);
-array_shift($array);
 
 if (sizeof($array)>0) {
 $items = $itemserv->findAllByIds(...$array);
 
 $id=0;
 foreach ($_POST as $itemid => $amount) {
-  if ($id!=0 && $amount!=0) {
+  if ($amount!=0) {
     $the_cart->addItem($items[$id],intval($amount));
  }
   $id=$id+1;
@@ -33,10 +35,9 @@ foreach ($_POST as $itemid => $amount) {
 }
 
 // -------- Save cart in session------------
-
-//$_SESSION->addCart($the_cart);
-
-
+if (sizeof($the_cart->getItems())!= 0) {
+$Session->setCart($the_cart);
+}
 //------------Cart rendering Rendering ----------------------
 $the_cart_items = $the_cart->getItems();
 echo'
@@ -78,7 +79,6 @@ echo'
 </table>';
 
 
-}
 
 
 ?>

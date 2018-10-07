@@ -33,7 +33,6 @@ foreach ($sql_items as $row) {
             <h4>',$row->getPrice(),'kr</h4>
            </div>
           <div class="card-footer">
-            <input type="hidden" name="id" value="',$row->getId(),'">
             <input type="number" min="0" class="form-control"  name="',$row->getId(),'" placeholder="Antal">
             <br>
             <input class="btn btn-primary" type="submit" value="Add items to cart">
