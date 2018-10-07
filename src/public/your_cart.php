@@ -1,37 +1,55 @@
-<!DOCTYPE html>
 <?php
   require('../App/global.php');
-  include('../App/components.php');
- ?>
+  use App\Classes\View;
+  use App\Classes\Cart;
+  use App\Classes\DAO\ItemMySQLDAO;
+  use App\Classes\Models\Item;
+  use App\Classes\ItemService;
+  use App\Classes\DAO\OrderMySQLDAO;
+  use App\Classes\Models\Order;
+  use App\Classes\OrderService;
+  use App\Classes\SessionManager;
 
-<html lang="en">
+  $itemDAO = new ItemMySQLDAO($databaseConnection);
+  $itemserv = new ItemService($itemDAO);
+  $Session = new SessionManager();
+  $the_cart = new Cart();
 
-  <?php
-    //<!-- Page header -->
-    head();
+  $Session->start();
+
+  // -------- Adding Session cart if it exists------------
+  if ($Session->getCart()!= null) {
+  $the_cart = $Session->getCart();
+  }
+
+  // -------- Adding items to cart------------
+  $array = array_keys($_POST);
+
+  if (sizeof($array)>0) {
+  $items = $itemserv->findAllByIds(...$array);
+
+  $id=0;
+  foreach ($_POST as $itemid => $amount) {
+    if ($amount!=0) {
+      $the_cart->addItem($items[$id],intval($amount));
+   }
+    $id=$id+1;
+  }
+  }
+
+  // -------- Save cart in session------------
+  if (sizeof($the_cart->getItems())!= 0) {
+  $Session->setCart($the_cart);
+  }
+  //------------Cart rendering Rendering ----------------------
+  $the_cart_items = $the_cart->getItems();
+
+
+  $view = new View('your_cart');
+  $view->setAttribute('loggedInUser', $loggedInUser);
+  $view->setAttribute('the_cart_items', $the_cart_items);
+  $view->setAttribute('the_cart', $the_cart);
+
+
+  echo $view->render();
   ?>
-
-  <body>
-    <?php
-      //<!-- Navbar -->
-      navbar();
-      //<!-- The cart -->
-      echo '<header class="jumbotron my-4">
-      <h1 class="display-1"><center> Your Cart </center></h1>
-      </header>';
-      //print_r($_POST);
-      include('../App/cart.php');
-      //<!-- Footer -->
-      footer();
-    ?>
-
-
-    <!-- Bootstrap core JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
-
-  </body>
-
-</html>
