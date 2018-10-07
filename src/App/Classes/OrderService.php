@@ -2,8 +2,8 @@
 
 namespace App\Classes;
 
+use App\Classes\Models\Order;
 use App\Interfaces\DAO\OrderDAO;
-use App\Interfaces\Models\Order;
 
 class OrderService
 {
@@ -18,9 +18,10 @@ class OrderService
     }
 
     /**
+     * Places a given order.
      * @param Order $order Save a given order.
      */
-    public function save(Order $order) {
+    public function place(Order $order) {
         $this->orderDAO->save($order);
     }
 }

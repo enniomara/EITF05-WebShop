@@ -2,33 +2,36 @@
 
 namespace App\Classes;
 
+use App\Classes\Models\User;
 use App\Interfaces\SessionManagerInterface;
+use Exception;
 
-class SessionManager implements SessionManagerInterface {
+class SessionManager implements SessionManagerInterface
+{
     // Cookie/session TTL, when no activity.
     private $timeoutDuration = 1800;
 
     /**
      * @inheritdoc
      */
-    public function start(): bool {
+    public function start(): bool
+    {
         // Checking if session is allowed to start or if its already running
-        if(session_status() == PHP_SESSION_DISABLED || session_status() == PHP_SESSION_ACTIVE){
+        if (session_status() == PHP_SESSION_DISABLED || session_status() == PHP_SESSION_ACTIVE) {
             return false;
         }
 
         // Starting session
-        if(!session_start()){
+        if (!session_start()) {
             throw new Exception("Couldn't start a session for some reason.");
         }
 
         // ToDo: Check if session is empty and initialize in a new method.
 
-        if(!$this->validate()){
-            if($this->destroy()){
+        if (!$this->validate()) {
+            if ($this->destroy()) {
                 $this->start();
-            }
-            else{
+            } else {
                 throw new Exception("Unable to destroy the session.");
             }
         }
@@ -41,18 +44,20 @@ class SessionManager implements SessionManagerInterface {
     /**
      * Sets last activity to request time.
      */
-    private function setActivityTime(){
+    private function setActivityTime()
+    {
         $_SESSION['LAST_ACTIVITY'] = $_SERVER['REQUEST_TIME'];
     }
 
     /**
      * Set a user to the session.
      *
-     * @param $id
+     * @param User $user
      */
-    public function setUser($id){
+    public function setUser(User $user)
+    {
         $_SESSION['authenticatedUser'] = [
-            'userId' => $id
+            'userId' => $user->getUsername()
         ];
     }
 
@@ -61,7 +66,8 @@ class SessionManager implements SessionManagerInterface {
      *
      * @param Cart The cart with items
      */
-    public function setCart(Cart $cart){
+    public function setCart(Cart $cart)
+    {
         $_SESSION['CART'] = $cart;
     }
 
@@ -70,12 +76,13 @@ class SessionManager implements SessionManagerInterface {
      *
      * @return bool if user is set
      */
-    public function isUserSet(): bool{
+    public function isUserSet(): bool
+    {
         return isset($_SESSION['authenticatedUser']['userId']);
     }
 
     /**
-     * Get user for this session
+     * Get the saved user from the session.
      *
      * The format of the array is
      * ```
@@ -84,10 +91,11 @@ class SessionManager implements SessionManagerInterface {
      * ]
      * ```
      *
-     * @return array
+     * @return array|null
      */
-    public function getUser(): array{
-        if(!$this->isUserSet()){
+    public function getUser(): ?array
+    {
+        if (!$this->isUserSet()) {
             return null;
         }
         return $_SESSION['authenticatedUser'];
@@ -96,29 +104,29 @@ class SessionManager implements SessionManagerInterface {
     /**
      * Get the cart for this session
      *
-     * @return Cart The set cart
+     * @return Cart|null The set cart
      */
-    public function getCart(): Cart{
-      if (isset($_SESSION['CART'])) {
-        return $_SESSION['CART'];
-      }
-        return new Cart();
+    public function getCart(): ?Cart
+    {
+        return $_SESSION['CART'] ?? null;
     }
 
     /**
      * @inheritdoc
      */
-    public function regenerate(): bool {
+    public function regenerate(): bool
+    {
         return session_regenerate_id();
     }
 
     /**
      * @inheritdoc
      */
-    public function validate(): bool {
+    public function validate(): bool
+    {
         // ToDo: Check so that parameters are okay.
         $time = $_SERVER['REQUEST_TIME'];
-        if ( isset( $_SESSION['LAST_ACTIVITY'] ) && ( $time - $_SESSION['LAST_ACTIVITY'] ) > $this->timeoutDuration ) {
+        if (isset($_SESSION['LAST_ACTIVITY']) && ($time - $_SESSION['LAST_ACTIVITY']) > $this->timeoutDuration) {
             return false;
         }
         return true;
@@ -127,7 +135,8 @@ class SessionManager implements SessionManagerInterface {
     /**
      * @inheritdoc
      */
-    public function destroy(): bool {
+    public function destroy(): bool
+    {
         // Clear session from globals
         unset($_COOKIE['PHPSESSID']);
         // empty value and expiration one hour before
