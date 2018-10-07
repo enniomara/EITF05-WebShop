@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Classes\DAO\UserMySQLDAO;
 use App\Classes\Models\User;
 use App\Classes\PasswordService;
+use App\Classes\SessionManager;
 use App\Classes\UserService;
 use App\Interfaces\DAO\UserDAO;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -25,13 +26,20 @@ class UserServiceTest extends TestCase
      */
     private $userModel;
 
+    /**
+     * @var SessionManager|MockObject
+     */
+    private $sessionManagerStub;
+
     protected function setUp()
     {
         parent::setUp();
         $this->userDAOStub = $this->getMockBuilder(UserMySQLDAO::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->userService = new UserService($this->userDAOStub);
+        $this->sessionManagerStub = $this->getMockBuilder(SessionManager::class)
+            ->getMock();
+        $this->userService = new UserService($this->userDAOStub, $this->sessionManagerStub);
         $this->userModel = new User("username", "password", "Address");
     }
 
@@ -43,6 +51,10 @@ class UserServiceTest extends TestCase
             ->method('findOneByUsernameAndPassword')
             ->with($this->userModel->getUsername(), $hashedPassword)
             ->willReturn($this->userModel);
+        // Assert that saving user to session is called
+        $this->sessionManagerStub->expects($this->once())
+            ->method('setUser')
+            ->with($this->userModel);
 
         $response = $this->userService->login($this->userModel->getUsername(), $this->userModel->getPassword());
         $this->assertTrue($response);
