@@ -17,7 +17,9 @@ $the_cart = new Cart();
 $Session->start();
 
 // -------- Adding Session cart if it exists------------
+if ($Session->getCart()!= null) {
 $the_cart = $Session->getCart();
+}
 
 // -------- Adding items to cart------------
 $array = array_keys($_POST);
