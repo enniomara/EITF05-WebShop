@@ -25,5 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $view = new View('login');
+$view->setAttribute('loggedInUser', $loggedInUser);
 echo $view->render();
 
