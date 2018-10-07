@@ -18,6 +18,6 @@ $sessionManager->start();
 $userService = new UserService(new UserMySQLDAO($databaseConnection), $sessionManager);
 
 $loggedInUser = null;
-if (null !== $sessionManager->getUser()) {
+if ($sessionManager->getUser() !== null) {
     $loggedInUser = $userService->find($sessionManager->getUser()['userId']);
 }
