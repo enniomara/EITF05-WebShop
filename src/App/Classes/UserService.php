@@ -2,6 +2,7 @@
 
 namespace App\Classes;
 
+use App\Classes\Models\User;
 use App\Interfaces\DAO\UserDAO;
 
 class UserService
@@ -30,8 +31,8 @@ class UserService
         $hashedPassword = PasswordService::hash($password);
 
         /** Check against database */
-        $result = $this->userDAO->findByUsernameAndPassword($username, $hashedPassword);
-        if (empty($result)) {
+        $user = $this->userDAO->findOneByUsernameAndPassword($username, $hashedPassword);
+        if (null === $user) {
             throw new \InvalidArgumentException('Incorrect authentication');
         }
 
@@ -45,9 +46,9 @@ class UserService
      * @param string $username
      * @param string $password
      * @param string $address
-     * @return array
+     * @return Models\User|null
      */
-    public function create(string $username, string $password, string $address)
+    public function create(string $username, string $password, string $address): User
     {
         /** Validate credentials */
         /** Generate hash */
@@ -55,7 +56,7 @@ class UserService
         /** Save to db */
         $result = $this->userDAO->create($username, $password, $address);
         /** Return created user */
-        return $this->userDAO->findByUsernameAndPassword($result, $hashedPassword);
+        return $this->userDAO->findOneByUsernameAndPassword($result, $hashedPassword);
     }
 }
 

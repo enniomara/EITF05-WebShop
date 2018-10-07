@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Classes\DAO\UserMySQLDAO;
+use App\Classes\Models\User;
 use App\Classes\PasswordService;
 use App\Classes\UserService;
 use App\Interfaces\DAO\UserDAO;
@@ -19,6 +20,10 @@ class UserServiceTest extends TestCase
      * @var UserService
      */
     private $userService;
+    /**
+     * @var User
+     */
+    private $userModel;
 
     protected function setUp()
     {
@@ -27,36 +32,37 @@ class UserServiceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->userService = new UserService($this->userDAOStub);
+        $this->userModel = new User("username", "password", "Address");
     }
 
     public function testLogin()
     {
+        $hashedPassword = PasswordService::hash($this->userModel->getPassword());
+        // Assert that the hashed password is used when searching in db
         $this->userDAOStub->expects($this->once())
-            ->method('findByUsernameAndPassword')
-            ->willReturn([
-                [
-                    'username' => 'test'
-                ]
-            ]);
+            ->method('findOneByUsernameAndPassword')
+            ->with($this->userModel->getUsername(), $hashedPassword)
+            ->willReturn($this->userModel);
 
-        $response = $this->userService->login('username', 'password');
+        $response = $this->userService->login($this->userModel->getUsername(), $this->userModel->getPassword());
         $this->assertTrue($response);
     }
 
     public function testLoginWithIncorrectAuthentication()
     {
         $this->userDAOStub->expects($this->once())
-            ->method('findByUsernameAndPassword')
-            ->willReturn([]);
+            ->method('findOneByUsernameAndPassword')
+            ->willReturn(null);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->userService->login('username', 'password');
     }
 
-    public function testCreate() {
-        $username = 'username';
-        $password = 'password';
-        $address = 'Lund';
+    public function testCreate()
+    {
+        $username = $this->userModel->getUsername();
+        $password = $this->userModel->getPassword();
+        $address = $this->userModel->getAddress();
         $hashedPassword = PasswordService::hash($password);
 
         $this->userDAOStub->expects($this->once())
@@ -64,14 +70,13 @@ class UserServiceTest extends TestCase
             ->with($username, $hashedPassword, $address)
             ->willReturn($username);
 
-        $returnValue = [$username];
         $this->userDAOStub->expects($this->once())
-            ->method('findByUsernameAndPassword')
+            ->method('findOneByUsernameAndPassword')
             ->with($username, $hashedPassword)
-            ->willReturn($returnValue);
+            ->willReturn($this->userModel);
 
         $response = $this->userService->create($username, $password, $address);
         // Assert that the value is returned is the value retrieved from findByUsernameAndPassword
-        $this->assertEquals($returnValue, $response);
+        $this->assertEquals($this->userModel, $response);
     }
 }
