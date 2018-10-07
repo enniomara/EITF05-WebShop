@@ -10,3 +10,5 @@ require_once __DIR__ . '/../App/autoload.php';
 use App\Classes\DBConnection;
 
 $databaseConnection = new DBConnection();
+$sessionManager = new \App\Classes\SessionManager();
+$sessionManager->start();

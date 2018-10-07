@@ -12,9 +12,15 @@ class UserService
      */
     private $userDAO;
 
-    public function __construct(UserDAO $userDAO)
+    /**
+     * @var SessionManager
+     */
+    private $sessionManager;
+
+    public function __construct(UserDAO $userDAO, SessionManager $sessionManager)
     {
         $this->userDAO = $userDAO;
+        $this->sessionManager = $sessionManager;
     }
 
     /**
@@ -37,6 +43,7 @@ class UserService
         }
 
         /** Set session */
+        $this->sessionManager->setUser($user);
 
         return true;
     }
