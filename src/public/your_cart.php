@@ -5,47 +5,43 @@ use App\Classes\View;
 use App\Classes\Cart;
 use App\Classes\DAO\ItemMySQLDAO;
 use App\Classes\ItemService;
-use App\Classes\SessionManager;
 
 $itemDAO = new ItemMySQLDAO($databaseConnection);
-$itemserv = new ItemService($itemDAO);
-$Session = new SessionManager();
-$the_cart = new Cart();
-
-$Session->start();
+$itemService = new ItemService($itemDAO);
+$cart = new Cart();
 
 // -------- Adding Session cart if it exists------------
-if ($Session->getCart() != null) {
-    $the_cart = $Session->getCart();
+if ($sessionManager->getCart() != null) {
+    $cart = $sessionManager->getCart();
 }
 
 // -------- Adding items to cart------------
 $array = array_keys($_POST);
 
 if (sizeof($array) > 0) {
-    $items = $itemserv->findAllByIds(...$array);
+    $items = $itemService->findAllByIds(...$array);
 
     $id = 0;
-    foreach ($_POST as $itemid => $amount) {
+    foreach ($_POST as $itemId => $amount) {
         if ($amount != 0) {
-            $the_cart->addItem($items[$id], intval($amount));
+            $cart->addItem($items[$id], intval($amount));
         }
         $id = $id + 1;
     }
 }
 
 // -------- Save cart in session------------
-if (sizeof($the_cart->getItems()) != 0) {
-    $Session->setCart($the_cart);
+if (sizeof($cart->getItems()) != 0) {
+    $sessionManager->setCart($cart);
 }
 //------------Cart rendering Rendering ----------------------
-$the_cart_items = $the_cart->getItems();
+$cartItems = $cart->getItems();
 
 
 $view = new View('your_cart');
 $view->setAttribute('loggedInUser', $loggedInUser);
-$view->setAttribute('the_cart_items', $the_cart_items);
-$view->setAttribute('the_cart', $the_cart);
+$view->setAttribute('cartItems', $cartItems);
+$view->setAttribute('cart', $cart);
 
 
 echo $view->render();

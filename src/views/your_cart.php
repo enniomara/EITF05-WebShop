@@ -21,20 +21,20 @@
       </thead>
       <tbody>
     <?php
-    foreach ($the_cart_items as $item) {
+    foreach ($cartItems as $item) {
       echo'
           <tr>
             <th>'.$item->getName().'</th>
-            <td>'.$the_cart->getAmount($item).'st</td>
+            <td>'.$cart->getAmount($item).'st</td>
             <td>'.$item->getPrice().' kr</td>
-            <td>'.$item->getPrice()*$the_cart->getAmount($item).' kr </td>
+            <td>'.$item->getPrice()*$cart->getAmount($item).' kr </td>
           </tr>';
     } ?>
           <tr>
             <th></th>
             <td></td>
             <th>Totalsumma:</th>
-            <th><?php  echo $the_cart->calculateTotalPrice(); ?> kr </th>
+            <th><?php  echo $cart->calculateTotalPrice(); ?> kr </th>
           </tr>
           <tr>
             <th></th>
