@@ -50,11 +50,13 @@ class Cart
     }
 
     /**
-     * returns amount
+     * Returns the number of a given item in the cart.
+     * @param Item $item
+     * @return int
      */
     public function getAmount(Item $item): int
     {
-      return $this->cartItems->getAmount($item);
+        return $this->cartItems->getAmount($item);
     }
 
 
