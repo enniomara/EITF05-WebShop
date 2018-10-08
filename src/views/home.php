@@ -13,14 +13,14 @@
 
 
     <div class="container">
-        <form action="your_cart.php" method="post">
+
             <div class="row text-center">
 
                 <?php
                 foreach ($items as $item) {
                     echo '
-                  <div class="col-lg-4 col-md-5 mb-4">
-
+                        <div class="col-lg-4 col-md-5 mb-4">
+                    <form action="cart.php?action=add" method="post">
                     <div class="card">
                       <img class="card-img-top" src="http://placehold.it/500x325" alt="">
 
@@ -38,12 +38,13 @@
                     </div>
 
                   </div>
+                  </form>
                 ';
                 }
                 ?>
 
             </div>
-        </form>
+
     </div>
 
     <?php include("footer.php"); ?>
