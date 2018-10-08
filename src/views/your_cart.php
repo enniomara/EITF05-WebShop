@@ -22,10 +22,10 @@
             foreach ($cartItems as $item) {
                 echo '
                   <tr>
-                    <th>' . $item->getName() . '</th>
-                    <td>' . $cart->getAmount($item) . 'st</td>
-                    <td>' . $item->getPrice() . ' kr</td>
-                    <td>' . $item->getPrice() * $cart->getAmount($item) . ' kr </td>
+                    <th>' . $this->escape($item->getName()) . '</th>
+                    <td>' . intval($cart->getAmount($item)) . 'st</td>
+                    <td>' . intval($item->getPrice()) . ' kr</td>
+                    <td>' . intval($item->getPrice()) * $cart->getAmount($item) . ' kr </td>
                   </tr>';
             }
             ?>
@@ -33,7 +33,7 @@
                 <th></th>
                 <td></td>
                 <th>Totalsumma:</th>
-                <th><?php echo $cart->calculateTotalPrice(); ?> kr</th>
+                <th><?php echo intval($cart->calculateTotalPrice()); ?> kr</th>
             </tr>
             <tr>
                 <th></th>
