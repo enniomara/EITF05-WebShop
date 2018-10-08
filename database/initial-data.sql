@@ -5,12 +5,14 @@ INSERT INTO users(username, password, address) VALUES
 
 insert into items(id, name, price) values
 (1, "Bil", 200),
-(2, "Motorcykel", 100);
+(2, "Motorcykel", 100),
+(3, "Hus", 200),
+(4, "Cykel", 100);
 
-insert into orders(id, username) values 
+insert into orders(id, username) values
 (1, "test");
 
-insert into orderItems(orderId, itemId, amount) values 
+insert into orderItems(orderId, itemId, amount) values
 (1, 1, 2),
 (1, 2, 1);
 

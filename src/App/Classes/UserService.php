@@ -2,6 +2,7 @@
 
 namespace App\Classes;
 
+use App\Classes\Models\User;
 use App\Interfaces\DAO\UserDAO;
 
 class UserService
@@ -11,9 +12,15 @@ class UserService
      */
     private $userDAO;
 
-    public function __construct(UserDAO $userDAO)
+    /**
+     * @var SessionManager
+     */
+    private $sessionManager;
+
+    public function __construct(UserDAO $userDAO, SessionManager $sessionManager)
     {
         $this->userDAO = $userDAO;
+        $this->sessionManager = $sessionManager;
     }
 
     /**
@@ -30,14 +37,32 @@ class UserService
         $hashedPassword = PasswordService::hash($password);
 
         /** Check against database */
-        $result = $this->userDAO->findByUsernameAndPassword($username, $hashedPassword);
-        if (empty($result)) {
+        $user = $this->userDAO->findOneByUsernameAndPassword($username, $hashedPassword);
+        if (null === $user) {
             throw new \InvalidArgumentException('Incorrect authentication');
         }
 
         /** Set session */
+        $this->sessionManager->setUser($user);
+        $this->sessionManager->regenerate();
 
         return true;
+    }
+
+    /**
+     * Finds a user from the database
+     *
+     * @param string $username
+     * @return User
+     */
+    public function find(string $username): User
+    {
+        $user = $this->userDAO->findOneByUsername($username);
+        if (null === $user) {
+            throw new \InvalidArgumentException("Could not find user with username `$username`");
+        }
+
+        return $user;
     }
 
     /**
@@ -45,9 +70,9 @@ class UserService
      * @param string $username
      * @param string $password
      * @param string $address
-     * @return array
+     * @return Models\User|null
      */
-    public function create(string $username, string $password, string $address)
+    public function create(string $username, string $password, string $address): User
     {
         /** Validate credentials */
         /** Generate hash */
@@ -55,7 +80,7 @@ class UserService
         /** Save to db */
         $result = $this->userDAO->create($username, $password, $address);
         /** Return created user */
-        return $this->userDAO->findByUsernameAndPassword($result, $hashedPassword);
+        return $this->userDAO->findOneByUsernameAndPassword($result, $hashedPassword);
     }
 }
 

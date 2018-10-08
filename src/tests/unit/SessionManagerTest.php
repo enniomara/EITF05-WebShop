@@ -2,13 +2,13 @@
 
 namespace Tests\Unit;
 
+use App\Classes\Models\User;
 use App\Classes\SessionManager;
 use PHPUnit\Framework\TestCase;
 use App\Classes\Cart;
-use App\Classes\Models\Item;
 
-class SessionManagerTest extends TestCase{
-
+class SessionManagerTest extends TestCase
+{
     /**
      * @var SessionManager
      */
@@ -18,26 +18,30 @@ class SessionManagerTest extends TestCase{
      * @var Cart
      */
     private $cart;
+    /**
+     * @var User
+     */
+    private $user;
 
-    protected function setUp(){
+    protected function setUp()
+    {
         parent::setUp();
         $this->session = new SessionManager();
         $this->cart = new Cart();
+        $this->user = new User("username", null, null);
     }
 
-    public function testCheckIfUserSet(): void {
+    public function testCheckIfUserSet(): void
+    {
         $this->assertFalse($this->session->isUserSet());
-
-        $userId = 1234567;
-        $this->session->setUser($userId);
-
+        $this->session->setUser($this->user);
         $this->assertTrue($this->session->isUserSet());
     }
 
-    public function testSetUser(): void{
-        $userId = 1234567;
-        $this->session->setUser($userId);
+    public function testSetUser(): void
+    {
+        $this->session->setUser($this->user);
 
-        $this->assertEquals($userId, $this->session->getUser()['userId']);
+        $this->assertEquals($this->user->getUsername(), $this->session->getUser()['userId']);
     }
 }
