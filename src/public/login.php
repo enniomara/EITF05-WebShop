@@ -5,6 +5,10 @@ require_once __DIR__ . '/../App/global.php';
 use App\Classes\View;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!hash_equals($_POST['token'], $sessionManager->getCSRFToken())) {
+        die('Token mismatch');
+    }
+
     // Handle case when login is submitted
     if (isset($_GET['action']) && $_GET['action'] === 'login') {
         if (isset($_POST['username']) && isset($_POST['password'])) {
@@ -26,5 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $view = new View('login');
 $view->setAttribute('loggedInUser', $loggedInUser);
+$view->setAttribute('CSRFToken', $sessionManager->getCSRFToken());
 echo $view->render();
 

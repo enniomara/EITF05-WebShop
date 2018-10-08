@@ -39,7 +39,7 @@ class SessionManager implements SessionManagerInterface
         // If it isn't set, we need to generate it
         $token = $this->getCSRFToken();
         if (isset($token) === false) {
-            $this->getCSRFToken();
+            $this->generateCSRFToken();
         }
 
         $this->setActivityTime();
@@ -143,8 +143,11 @@ class SessionManager implements SessionManagerInterface
      * Get the generated CSRF token.
      * @return string
      */
-    public function getCSRFToken(): string
+    public function getCSRFToken(): ?string
     {
+        if (!isset($_SESSION['csrfToken'])) {
+            return null;
+        }
         return $_SESSION['csrfToken'];
     }
 
