@@ -20,13 +20,7 @@
             <tbody>
             <?php
             foreach ($cartItems as $item) {
-                echo '
-                  <tr>
-                    <th>' . $this->escape($item->getName()) . '</th>
-                    <td>' . intval($cart->getAmount($item)) . 'st</td>
-                    <td>' . intval($item->getPrice()) . ' kr</td>
-                    <td>' . intval($item->getPrice()) * $cart->getAmount($item) . ' kr </td>
-                  </tr>';
+                include('cart/itemRow.php');
             }
             ?>
             <tr>
