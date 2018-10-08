@@ -36,6 +36,12 @@ class SessionManager implements SessionManagerInterface
             }
         }
 
+        // If it isn't set, we need to generate it
+        $token = $this->getCSRFToken();
+        if (isset($token) === false) {
+            $this->generateCSRFToken();
+        }
+
         $this->setActivityTime();
 
         return true;
@@ -116,6 +122,7 @@ class SessionManager implements SessionManagerInterface
      */
     public function regenerate(): bool
     {
+        $this->generateCSRFToken();
         return session_regenerate_id();
     }
 
@@ -133,6 +140,18 @@ class SessionManager implements SessionManagerInterface
     }
 
     /**
+     * Get the generated CSRF token.
+     * @return string
+     */
+    public function getCSRFToken(): ?string
+    {
+        if (!isset($_SESSION['csrfToken'])) {
+            return null;
+        }
+        return $_SESSION['csrfToken'];
+    }
+
+    /**
      * @inheritdoc
      */
     public function destroy(): bool
@@ -146,5 +165,13 @@ class SessionManager implements SessionManagerInterface
         $_SESSION = [];
         // Clear session from disk
         return session_destroy();
+    }
+
+    /**
+     * Generate a random string and set it as a CSRF token in session
+     */
+    private function generateCSRFToken(): void
+    {
+        $_SESSION['csrfToken'] = bin2hex(random_bytes(32));
     }
 }
