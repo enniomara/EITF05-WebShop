@@ -1,6 +1,7 @@
 <html>
 <?php include("head.php"); ?>
 <body>
+    <?php include("navbar/navbar.php"); ?>
     <h1>Login:</h1>
     <form action="login.php?action=login" name="login" method="POST">
         <label for="username">Username:</label> <input type="text" name="username">
@@ -20,7 +21,7 @@
         <br />
         <button type="submit">Submit</button>
     </form>
-    
+
     <?php include("footer.php"); ?>
 </body>
 </html>
