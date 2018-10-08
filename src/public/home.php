@@ -6,11 +6,11 @@ use App\Classes\ItemService;
 use App\Classes\DAO\ItemMySQLDAO;
 
 $itemDAO = new ItemMySQLDAO($databaseConnection);
-$itemserv = new ItemService($itemDAO);
-$sql_items = $itemserv->findAllItems();
+$itemService = new ItemService($itemDAO);
+$items = $itemService->findAllItems();
 
 $view = new View('home');
 $view->setAttribute('loggedInUser', $loggedInUser);
-$view->setAttribute('sql_items', $sql_items);
+$view->setAttribute('items', $items);
 
 echo $view->render();
