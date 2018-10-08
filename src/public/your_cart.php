@@ -8,22 +8,22 @@ use App\Classes\ItemService;
 
 $itemDAO = new ItemMySQLDAO($databaseConnection);
 $itemService = new ItemService($itemDAO);
-$cart = new Cart();
 
-// -------- Adding Session cart if it exists------------
-if ($sessionManager->getCart() != null) {
+
+$cart = new Cart();
+// If cart is saved in session, use that cart instead
+if ($sessionManager->getCart() !== null) {
     $cart = $sessionManager->getCart();
 }
 
-// -------- Adding items to cart------------
-$array = array_keys($_POST);
-
-if (sizeof($array) > 0) {
-    $items = $itemService->findAllByIds(...$array);
+$itemIds = array_keys($_POST);
+// If there are items that will be added to cart from $_POST, add them
+if (!empty($itemIds)) {
+    $items = $itemService->findAllByIds(...$itemIds);
 
     $id = 0;
     foreach ($_POST as $itemId => $amount) {
-        if ($amount != 0) {
+        if ($amount !== 0) {
             $cart->addItem($items[$id], intval($amount));
         }
         $id = $id + 1;
@@ -31,7 +31,7 @@ if (sizeof($array) > 0) {
 }
 
 // -------- Save cart in session------------
-if (sizeof($cart->getItems()) != 0) {
+if (!empty($cart->getItems())) {
     $sessionManager->setCart($cart);
 }
 //------------Cart rendering Rendering ----------------------
