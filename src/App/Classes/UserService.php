@@ -44,6 +44,7 @@ class UserService
 
         /** Set session */
         $this->sessionManager->setUser($user);
+        $this->sessionManager->regenerate();
 
         return true;
     }

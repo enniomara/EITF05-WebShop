@@ -9,6 +9,7 @@
         <label for="password">Password:</label> <input type="password" name="password">
         <br />
         <button type="submit">Submit</button>
+        <input type="hidden" name="token" value="<?php echo $CSRFToken ?>">
     </form>
 
     <h1>Sign up:</h1>
@@ -20,6 +21,7 @@
         <label for="address">Address:  <input type="text" name="address"></label>
         <br />
         <button type="submit">Submit</button>
+        <input type="hidden" name="token" value="<?php echo $CSRFToken ?>">
     </form>
 
     <?php include("footer.php"); ?>

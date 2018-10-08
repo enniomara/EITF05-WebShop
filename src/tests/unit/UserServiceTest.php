@@ -55,6 +55,8 @@ class UserServiceTest extends TestCase
         $this->sessionManagerStub->expects($this->once())
             ->method('setUser')
             ->with($this->userModel);
+        $this->sessionManagerStub->expects($this->once())
+            ->method('regenerate');
 
         $response = $this->userService->login($this->userModel->getUsername(), $this->userModel->getPassword());
         $this->assertTrue($response);
