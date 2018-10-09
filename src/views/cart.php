@@ -2,6 +2,7 @@
     <?php include("head.php"); ?>
     <body>
         <?php include("navbar/navbar.php"); ?>
+        <?php include("flashMessages.php"); ?>
         <header class="jumbotron my-4">
             <h1 class="display-1">
                 <center> Your Cart</center>

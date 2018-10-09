@@ -26,7 +26,7 @@ class FlashMessageService implements FlashMessageServiceInterface
     {
         $this->sessionManager = $sessionManager;
 
-        if ($this->sessionManager->has($this->flashStorageKeyName)) {
+        if (false === $this->sessionManager->has($this->flashStorageKeyName)) {
             $this->sessionManager->put($this->flashStorageKeyName, $this->defaultFlashStorageLayout);
         }
     }
@@ -79,7 +79,8 @@ class FlashMessageService implements FlashMessageServiceInterface
     {
         $messages = [];
 
-        $flashMessages = $this->sessionManager->get($this->defaultFlashStorageLayout);
+        $flashMessages = $this->sessionManager->get($this->flashStorageKeyName);
+
         foreach ($flashMessages[$type] as $message) {
             $messages[] = $this->buildFlashMessage($message, $type);
         }

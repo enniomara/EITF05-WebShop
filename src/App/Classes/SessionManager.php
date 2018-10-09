@@ -194,7 +194,7 @@ class SessionManager implements SessionManagerInterface
      */
     public function get($key)
     {
-        return $_SESSION[$key];
+        return $_SESSION[$key] ?? null;
     }
 
     /**
