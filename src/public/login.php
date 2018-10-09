@@ -8,6 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!hash_equals($_POST['token'], $sessionManager->getCSRFToken())) {
         die('Token mismatch');
     }
+    
     // Handle case when login is submitted
     if (isset($_GET['action']) && $_GET['action'] === 'login') {
         if (isset($_POST['username']) && isset($_POST['password'])) {
