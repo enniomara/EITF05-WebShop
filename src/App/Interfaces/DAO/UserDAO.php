@@ -27,6 +27,5 @@ interface UserDAO
      * @param string $address
      * @return string The id of the inserted row.
      */
-
     public function create(string $username, string $password, string $address): string;
 }
