@@ -174,4 +174,37 @@ class SessionManager implements SessionManagerInterface
     {
         $_SESSION['csrfToken'] = bin2hex(random_bytes(32));
     }
+
+    /**
+     * Put a key/value pair in the session.
+     *
+     * @param $key
+     * @param $value
+     */
+    public function put($key, $value)
+    {
+        $_SESSION[$key] = $value;
+    }
+
+    /**
+     * Get an item from the session.
+     *
+     * @param $key
+     * @return mixed
+     */
+    public function get($key)
+    {
+        return $_SESSION[$key];
+    }
+
+    /**
+     * Check if a key is stored inn the session.
+     *
+     * @param $key
+     * @return bool
+     */
+    public function has($key): bool
+    {
+        return array_key_exists($key, $_SESSION);
+    }
 }
