@@ -5,11 +5,12 @@ namespace App\Interfaces;
 /**
  * Session manager interface
  */
-interface SessionManagerInterface {
+interface SessionManagerInterface
+{
 
     /**
      * For easies starting a session and creating a cookie.
-     * 
+     *
      * @return bool if session was created
      * @throws Exception if session somehow didn't start
      */
@@ -35,4 +36,28 @@ interface SessionManagerInterface {
      * @return bool true if success and false if not.
      */
     public function destroy();
+
+    /**
+     * Get an item from the session.
+     *
+     * @param $key
+     * @return mixed
+     */
+    public function get($key);
+
+    /**
+     * Put a key/value pair in the session.
+     *
+     * @param $key
+     * @param $value
+     */
+    public function put($key, $value);
+
+    /**
+     * Check if a key is stored inn the session.
+     *
+     * @param $key
+     * @return bool
+     */
+    public function has($key): bool;
 }
