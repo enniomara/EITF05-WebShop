@@ -27,7 +27,7 @@ class PasswordService implements PasswordServiceInterface{
     * @return string
     */
     public static function hash(){
-        return password_hash($passwordString, PASSWORD_BCRYPT);
+        return password_hash(self::passwordString, PASSWORD_BCRYPT);
     }
 		
 	/** 
@@ -36,7 +36,7 @@ class PasswordService implements PasswordServiceInterface{
     */
 	public static function stringError(){
 	    if(notCommon == true){
-			return $errorMessages;
+			return self::errorMessages;
 		}
 		return "Please pick another password.";
 	}
@@ -46,7 +46,7 @@ class PasswordService implements PasswordServiceInterface{
     * @return boolean
     */
 	private function checkForUppercase() {
-		if (1 == preg_match( '/[A-Z]/', $passwordString)){
+		if (1 == preg_match( '/[A-Z]/', $this->passwordString)){
 			return true;
         }	
 		array_push($errorMessages, "Uppercase letter missing.");
@@ -58,7 +58,7 @@ class PasswordService implements PasswordServiceInterface{
     * @return boolean
     */
 	private function checkForLowercase(){
-		if(1 == preg_match( '/[a-z]/', $passwordString)){
+		if(1 == preg_match( '/[a-z]/', $this->passwordString)){
 			return true;	
 		}
 		array_push($errorMessages, "Lowercase letter missing.");
@@ -70,7 +70,7 @@ class PasswordService implements PasswordServiceInterface{
     * @return boolean
     */
 	private function checkForNumbers() {
-		if(1 == preg_match( '/\d/', $passwordString)){
+		if(1 == preg_match( '/\d/', $this->passwordString)){
 			return true;
 		}
 		array_push($errorMessages, "Number missing.");
@@ -82,7 +82,7 @@ class PasswordService implements PasswordServiceInterface{
     * @return boolean
     */
 	private function checkForSpecialChar() {
-		if(1== preg_match('/[^a-zA-Z\d]/', $passwordString)){
+		if(1== preg_match('/[^a-zA-Z\d]/', $this->passwordString)){
 			return true;
 		}
 	array_push($errorMessages, "Special character missing.");
@@ -94,11 +94,11 @@ class PasswordService implements PasswordServiceInterface{
     * @return boolean
     */
     private function checkSymbolLenght(){
-        $passwordLength = strlen($passwordString);
-		if($passwordLenght > 6){
+        $passwordLength = strlen($this->passwordString);
+		if($this->passwordLenght > 6){
 			return true;
 		}
-		$errorMessage .= "Please add  atleast " . 7 - $passwordLength . " characters to your password";
+		$this->errorMessage .= "Please add  atleast " . 7 - $passwordLength . " characters to your password";
 		return false;
     }
 	
@@ -107,11 +107,11 @@ class PasswordService implements PasswordServiceInterface{
     * @return boolean
     */
 	private function checkNotCommon(){
-		if($databaseConnection->connect_error){
-			die("Connection failed: " . $databaseConnection->connect_error);
+		if($this->databaseConnection->connect_error){
+			die("Connection failed: " . $this->databaseConnection->connect_error);
 		}
-		$query = $databaseConnection->prepare("SELECT count() FROM 'blacklistedPasswords' WHERE password = ?");
-		$query->bind_param('s', $passwordString);
+		$query = $this->databaseConnection->prepare("SELECT count() FROM 'blacklistedPasswords' WHERE password = ?");
+		$query->bind_param('s', $this->passwordString);
 		$result = $query->execute();
 		$query->close();
 		if($result == 0){
