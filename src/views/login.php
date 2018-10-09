@@ -2,9 +2,8 @@
 <?php include("head.php"); ?>
 <body>
     <?php include("navbar/navbar.php"); ?>
-    <?php
-    include('flashMessages.php');
-    ?>
+    <?php include('flashMessages.php'); ?>
+
     <h1>Login:</h1>
     <form action="login.php?action=login" name="login" method="POST">
         <label for="username">Username:</label> <input type="text" name="username">
