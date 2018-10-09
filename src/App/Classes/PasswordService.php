@@ -1,6 +1,6 @@
 <?php
 class PasswordService implements PasswordServiceInterface{
-    private $errorMessage = "Please include in your password:<br/>";
+    private $errorMessages = array("Please change your password.");
     private $notCommon = false;
     private $databaseConnection;
     private $passwordString;
@@ -19,7 +19,7 @@ class PasswordService implements PasswordServiceInterface{
     * @return boolean
     */
 	public static function isValid(){
-		return 	checkForUppercase() && checkForLowercase() && checkForNumber() && checkForSpecialChar() && checkSymbolLength() && checkNotCommon();
+		return 	checkForUppercase() || checkForLowercase() || checkForNumber() || checkForSpecialChar() || checkSymbolLength() || checkNotCommon();
 	}
 		
     /** 
@@ -36,9 +36,9 @@ class PasswordService implements PasswordServiceInterface{
     */
 	public static function stringError(){
 	    if(notCommon == true){
-			return $errorMessage;
+			return $errorMessages;
 		}
-		return $errorMessage = "Please pick another password.";
+		return "Please pick another password.";
 	}
                
 	/** 
@@ -49,7 +49,7 @@ class PasswordService implements PasswordServiceInterface{
 		if (1 == preg_match( '/[A-Z]/', $passwordString)){
 			return true;
         }	
-		$errorMessage .= "- An uppercase letter<br/>";
+		array_push($errorMessages, "Uppercase letter missing.");
 		return false;
 	}
 	
@@ -61,7 +61,7 @@ class PasswordService implements PasswordServiceInterface{
 		if(1 == preg_match( '/[a-z]/', $passwordString)){
 			return true;	
 		}
-		$errorMessage .= "- A lowercase letter<br/>";
+		array_push($errorMessages, "Lowercase letter missing.");
 		return false;
 	}
 	
@@ -73,7 +73,7 @@ class PasswordService implements PasswordServiceInterface{
 		if(1 == preg_match( '/\d/', $passwordString)){
 			return true;
 		}
-		$errorMessage .= "- A number<br/>";
+		array_push($errorMessages, "Number missing.");
 		return false;
 	}
 	
@@ -85,7 +85,7 @@ class PasswordService implements PasswordServiceInterface{
 		if(1== preg_match('/[^a-zA-Z\d]/', $passwordString)){
 			return true;
 		}
-		$errorMessage .= "- A special character<br/>";
+	array_push($errorMessages, "Special character missing.");
 		return false;
 	}
 		
@@ -94,10 +94,11 @@ class PasswordService implements PasswordServiceInterface{
     * @return boolean
     */
     private function checkSymbolLenght(){
-		if(strlen($passwordString) > 6){
+        $passwordLength = strlen($passwordString);
+		if($passwordLenght > 6){
 			return true;
 		}
-		$errorMessage .= "- Password length of atleast 7 characters";
+		$errorMessage .= "Please add  atleast " . 7 - $passwordLength . " characters to your password";
 		return false;
     }
 	
@@ -116,8 +117,8 @@ class PasswordService implements PasswordServiceInterface{
 		if($result == 0){
 			return true;
 		}
-		$notCommon = true;
-		return true;
+		array_push($errorMessages, "Not a valid password.");
+		return false;
 	}
 }
 ?>
