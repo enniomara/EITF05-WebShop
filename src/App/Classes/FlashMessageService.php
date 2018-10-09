@@ -15,7 +15,7 @@ class FlashMessageService implements FlashMessageServiceInterface
 
     protected $flashStorageKeyName = 'flashMessages';
 
-    protected $defaultFlashStorageLayout = [
+    protected const DEFAULT_STORAGE_LAYOUT = [
         FlashMessageServiceInterface::ERROR => [],
         FlashMessageServiceInterface::WARNING => [],
         FlashMessageServiceInterface::SUCCESS => [],
@@ -27,7 +27,7 @@ class FlashMessageService implements FlashMessageServiceInterface
         $this->sessionManager = $sessionManager;
 
         if (false === $this->sessionManager->has($this->flashStorageKeyName)) {
-            $this->sessionManager->put($this->flashStorageKeyName, $this->defaultFlashStorageLayout);
+            $this->sessionManager->put($this->flashStorageKeyName, self::DEFAULT_STORAGE_LAYOUT);
         }
     }
 
@@ -48,7 +48,7 @@ class FlashMessageService implements FlashMessageServiceInterface
     {
         // TODO: Implement clear() method.
         $flashStorage = $this->sessionManager->get($this->flashStorageKeyName);
-        $flashStorage[$type] = $this->defaultFlashStorageLayout[$type];
+        $flashStorage[$type] = self::DEFAULT_STORAGE_LAYOUT[$type];
         $this->sessionManager->put($this->flashStorageKeyName, $flashStorage);
     }
 
@@ -62,7 +62,7 @@ class FlashMessageService implements FlashMessageServiceInterface
         }
 
         $flashMessages = $this->sessionManager->get($this->flashStorageKeyName);
-        foreach ($this->defaultFlashStorageLayout as $flashStorageType => $value) {
+        foreach (self::DEFAULT_STORAGE_LAYOUT as $flashStorageType => $value) {
             // Return true when the first found message is found
             if (!empty($flashMessages[$flashStorageType])) {
                 return true;
