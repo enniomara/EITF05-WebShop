@@ -57,7 +57,6 @@ class SessionManager implements SessionManagerInterface
 
     /**
      * Set a user to the session.
-
      *
      * @param User $user
      */
