@@ -26,7 +26,6 @@ create table orderItems(
 drop table if exists orders;
 create table orders(
     id integer AUTO_INCREMENT PRIMARY KEY,
-    id integer AUTO_INCREMENT PRIMARY KEY,
     username char(120),
     time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (username) references users(username)
