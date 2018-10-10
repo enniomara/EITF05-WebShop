@@ -6,132 +6,138 @@ use App\Interfaces\PasswordServiceInterface;
 
 class PasswordService implements PasswordServiceInterface
 {
-    private static $errorMessages = array("Please change your password.");
+    private $errorMessages = array("Please change your password.");
+    private $password;
+    private $databaseConnection;
+
+    /**
+     * PasswordService constructor.
+     * @param \PDO $databaseConnection
+     */
+    private function __construct(\PDO $databaseConnection)
+    {
+        $this->databaseConnection = $databaseConnection;
+    }
+
 
     /**
      * Checks if password in PasswordService is valid
+     *
      * @param string passwordString
-     * @param \PDO $databaseConnection
      * @return bool
      */
-    public static function isValid(string $passwordString, \PDO $databaseConnection)
+    public function isValid(string $password): bool
     {
-        if (self::checkForUppercase($passwordString) || self::checkForLowercase($passwordString) || self::checkForNumber($passwordString) || self::checkForSpecialChar($passwordString) || self::checkSymbolLength($passwordString) || self::checkNotCommon($passwordString, $databaseConnection)) {
-            return true;
-        }
-        return false;
+        $this->password = $password;
+        return ($this->hasUppercase() || $this->hasLowercase() || $this->hasNumber() || $this->hasSpecialChar() || $this->checkSymbolLength() || $this->isNotCommon());
     }
 
     /**
-     * Hashes password using php standard function password_hash() with Bcrypt.
-     * @param string $passwordString
+     * Hashes password using php standard function password_hash() with Bcrypt
+     *
+     * @param string $password
      * @return string
      */
-    public static function hash(string $passwordString)
+    public static function hash(string $password): string
     {
-        return password_hash($passwordString, PASSWORD_BCRYPT);
+        return password_hash($password, PASSWORD_BCRYPT);
     }
 
     /**
-     * Clears error message
+     * Returns array with error messages
+     *
+     * @return array $errorMessages
      */
-    public function clearError()
+    public function getError(): array
     {
-        unset($errorMessages);
-        $errorMessages = "Please change your password.";
-
+        return $this->errorMessages;
     }
 
     /**
      * Checks if there is an uppercase letter in the password
-     * @param string $passwordString
-     * @return boolean
+     *
+     * @return bool
      */
-    private static function checkForUppercase($passwordString)
+    private function hasUppercase(): bool
     {
-        if (1 == preg_match('/[A-Z]/', $passwordString)) {
+        if (1 == preg_match('/[A-Z]/', $this->password)) {
             return true;
         }
-        array_push($errorMessages, "Uppercase letter missing.");
+        array_push($this->errorMessages, "Uppercase letter missing.");
         return false;
     }
 
     /**
      * Checks if there is an lowercase letter in the password
-     * @param string $passwordString
-     * @return boolean
+     *
+     * @return bool
      */
-    private static function checkForLowercase(string $passwordString)
+    private function hasLowercase(): bool
     {
-        if (1 == preg_match('/[a-z]/', $passwordString)) {
+        if (1 == preg_match('/[a-z]/', $this->password)) {
             return true;
         }
-        array_push($errorMessages, "Lowercase letter missing.");
+        array_push($this->errorMessages, "Lowercase letter missing.");
         return false;
     }
 
     /**
-     * Checks if there is a number in the password.
-     * @param string $passwordString
-     * @return boolean
+     * Checks if there is a number in the password
+     *
+     * @return bool
      */
-    private static function checkForNumbers(string $passwordString)
+    private function hasNumber(): bool
     {
-        if (1 == preg_match('/\d/', $passwordString)) {
+        if (1 == preg_match('/\d/', $this->password)) {
             return true;
         }
-        array_push($errorMessages, "Number missing.");
+        array_push($this->errorMessages, "Number missing.");
         return false;
     }
 
     /**
-     * Checks if there is a special character in the password.
-     * @param string $passwordString
-     * @return boolean
+     * Checks if there is a special character in the password
+     *
+     * @return bool
      */
-    private static function checkForSpecialChar(string $passwordString)
+    private function hasSpecialChar(): bool
     {
-        if (1 == preg_match('/[^a-zA-Z\d]/', $passwordString)) {
+        if (1 == preg_match('/[^a-zA-Z\d]/', $this->password)) {
             return true;
         }
-        array_push($errorMessages, "Special character missing.");
+        array_push($this->errorMessages, "Special character missing.");
         return false;
     }
 
     /**
      * Checks if the password has atleast 7 characters.
-     * @param string $passwordString
+     *
      * @return boolean
      */
-    private static function checkSymbolLenght(string $passwordString)
+    private function checkSymbolLength(): bool
     {
-        $passwordLength = strlen($passwordString);
+        $passwordLength = strlen($this->password);
         if ($passwordLength > 6) {
             return true;
         }
-        array_push($errorMessages, "Please add  atleast " . 7 - $passwordLength . " characters to your password");
+        array_push($this->errorMessages, "Please add  atleast " . 7 - $passwordLength . " characters to your password");
         return false;
     }
 
     /**
      * Checks if the password exists in the table blacklistedPasswords.
-     * @param string $passwordString
-     * @param \PDO $databaseConnection
-     * @return boolean
+     *
+     * @return bool
      */
-    private static function checkNotCommon(string $passwordString, \PDO $databaseConnection)
+    private function isNotCommon(): bool
     {
-        $query = $databaseConnection->prepare("SELECT count() FROM 'blacklistedPasswords' WHERE password = :passwordString");
-        $query->bindValue(':passwordString', $passwordString);
-        try {
-            $result = $query->execute();
-        } catch (\PDOException $e) {
-            throw $e;
-        }
+        $query = $this->databaseConnection->prepare("SELECT count() FROM 'blacklistedPasswords' WHERE password = :passwordString");
+        $query->bindValue(':passwordString', $this->password);
+        $result = $query->execute();
         if ($result == 0) {
             return true;
         }
-        array_push($errorMessages, "Not a valid password.");
+        array_push($this->errorMessages, "Not a valid password.");
         return false;
     }
 }

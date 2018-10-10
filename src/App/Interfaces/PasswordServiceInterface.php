@@ -5,5 +5,5 @@ namespace App\Interfaces;
 interface PasswordServiceInterface
 {
     public static function hash(string $password) : string;
-    public static function isValid(string $password, \PDO $databaseConnection) : bool;
+    public function isValid(string $password) : bool;
 }
