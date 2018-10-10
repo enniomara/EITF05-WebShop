@@ -60,7 +60,7 @@ class PasswordService implements PasswordServiceInterface
      */
     private function hasUppercase(): bool
     {
-        if (1 == preg_match('/[A-Z]/', $this->password)) {
+        if (1 == preg_match('/\p{Lu}/', $this->password)) {
             return true;
         }
         array_push($this->errorMessages, "Uppercase letter missing.");
@@ -74,7 +74,7 @@ class PasswordService implements PasswordServiceInterface
      */
     private function hasLowercase(): bool
     {
-        if (1 == preg_match('/[a-z]/', $this->password)) {
+        if (1 == preg_match('/\p{Ll}/', $this->password)) {
             return true;
         }
         array_push($this->errorMessages, "Lowercase letter missing.");
@@ -102,7 +102,7 @@ class PasswordService implements PasswordServiceInterface
      */
     private function hasSpecialChar(): bool
     {
-        if (1 == preg_match('/[^a-zA-Z\d]/', $this->password)) {
+        if (1 == preg_match('/[^\p{Lu}\p{Ll}\d]/', $this->password)) {
             return true;
         }
         array_push($this->errorMessages, "Special character missing.");
