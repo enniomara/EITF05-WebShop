@@ -21,3 +21,5 @@ $loggedInUser = null;
 if ($sessionManager->getUser() !== null) {
     $loggedInUser = $userService->find($sessionManager->getUser()['userId']);
 }
+
+$flashMessageService = new \App\Classes\FlashMessageService($sessionManager);

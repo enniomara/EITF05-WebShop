@@ -12,5 +12,6 @@ $items = $itemService->findAllItems();
 $view = new View('home');
 $view->setAttribute('loggedInUser', $loggedInUser);
 $view->setAttribute('items', $items);
+$view->setAttribute('flashMessages', $flashMessageService->getMessages());
 
 echo $view->render();

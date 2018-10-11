@@ -52,5 +52,6 @@ $view = new View('cart');
 $view->setAttribute('loggedInUser', $loggedInUser);
 $view->setAttribute('cartItems', $cartItems);
 $view->setAttribute('cart', $cart);
+$view->setAttribute('flashMessages', $flashMessageService->getMessages());
 
 echo $view->render();

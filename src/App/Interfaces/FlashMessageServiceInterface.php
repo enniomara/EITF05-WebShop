@@ -30,10 +30,17 @@ interface FlashMessageServiceInterface
     public function hasMessages(int $type = null): bool;
 
     /**
-     * Get a list of errors and remove them from the storage.
+     * Get a list of errors of type $type and remove them from the storage.
      *
      * @param int $type
      * @return FlashMessage[]
      */
     public function getMessage(int $type): array;
+
+    /**
+     * Get a lost of all messages and remove them from the storage.
+     *
+     * @return array
+     */
+    public function getMessages(): array;
 }
