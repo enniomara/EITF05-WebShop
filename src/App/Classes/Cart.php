@@ -59,6 +59,14 @@ class Cart
         return $this->cartItems->getAmount($item);
     }
 
+    /**
+     * @return ItemCollectionInterface
+     */
+    public function getCartItemInterface(): ItemCollectionInterface
+    {
+        return $this->cartItems;
+    }
+
 
     /**
      * Calculate total price of all items on cart.

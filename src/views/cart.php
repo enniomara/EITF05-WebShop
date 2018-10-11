@@ -30,13 +30,17 @@
                 <th>Totalsumma:</th>
                 <th><?php echo intval($cart->calculateTotalPrice()); ?> kr</th>
             </tr>
-            <tr>
-                <th></th>
-                <td></td>
-                <th></th>
-                <th><a href="/receipt.php"><input class="btn btn-primary" type="submit" value="Buy Items"></a></th>
-            </tr>
         </table>
+
+        <div>
+            <form action="cart.php?action=place" name="placeOrder" method="POST">
+                <label>Card Number: <input type="text" name="cardNr"></label> <br>
+                <label>CVV: <input type="text" name="cvv"></label> <br>
+                <label>Expiry Date: <input type="date" name="expiryDate""></label>
+                <br>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
 
         <?php include("footer.php"); ?>
 
