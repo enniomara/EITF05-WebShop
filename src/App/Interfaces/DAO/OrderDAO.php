@@ -12,4 +12,11 @@ interface OrderDAO
      * @param Order $order
      */
     public function save(Order $order): void;
+
+    /**
+     * Finds order from the database by order id.
+     * 
+     * @param int $orderId
+     */
+    public function findOrder(int $orderId): array;
 }
