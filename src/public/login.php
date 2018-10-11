@@ -6,7 +6,9 @@ use App\Classes\View;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!hash_equals($_POST['token'], $sessionManager->getCSRFToken())) {
-        die('Token mismatch');
+        $flashMessageService->add('Token mismatch', \App\Interfaces\FlashMessageServiceInterface::ERROR);
+        header("Location: /login.php");
+        exit();
     }
 
     // Handle case when login is submitted
@@ -31,5 +33,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $view = new View('login');
 $view->setAttribute('loggedInUser', $loggedInUser);
 $view->setAttribute('CSRFToken', $sessionManager->getCSRFToken());
+$view->setAttribute('flashMessages', $flashMessageService->getMessages());
 echo $view->render();
-

@@ -75,6 +75,25 @@ class FlashMessageService implements FlashMessageServiceInterface
     /**
      * @inheritdoc
      */
+    public function getMessages(): array
+    {
+        $messages = [];
+
+        $flashMessages = $this->sessionManager->get($this->flashStorageKeyName);
+
+        foreach ($flashMessages as $type => $flashMessageTypeValue) {
+            foreach ($flashMessageTypeValue as $message) {
+                $messages[] = $this->buildFlashMessage($message, $type);
+            }
+            $this->clear($type);
+        }
+
+        return $messages;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getMessage(int $type): array
     {
         $messages = [];
