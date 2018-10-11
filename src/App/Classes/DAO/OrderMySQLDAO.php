@@ -64,17 +64,23 @@ class OrderMySQLDAO implements OrderDAO
     {
         $items = $itemCollection->getItems();
 
+        if (empty($items)) {
+            throw new \InvalidArgumentException('ItemCollection has no items');
+        }
+
         // $valuesString is the string that contains all (?,?,?) that will be added to the prepared statement
         $valuesString = '';
         $values = [];
         foreach ($items as $index => $item) {
-            $valuesString .= "( :orderId_$index, :itemId_$index, :amount_$index ) ";
+            $valuesString .= "( :orderId_$index, :itemId_$index, :amount_$index ),";
             $values[$index] = [
                 'orderId' => $orderId,
                 'itemId' => $item->getId(),
                 'amount' => $itemCollection->getAmount($item)
             ];
         }
+        // Remove the last comma (,) from $valuesString
+        $valuesString = \substr($valuesString, 0, -1);
 
         $sql = "INSERT INTO orderItems (orderId, itemId, amount) VALUES {$valuesString}";
 
