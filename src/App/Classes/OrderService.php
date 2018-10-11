@@ -40,4 +40,13 @@ class OrderService
         // Attempt to perform an order
         $this->orderDAO->save($order);
     }
+
+    /**
+     * Find order items by order id.
+     * 
+     * @param int $orderId
+     */
+    public function findOrder(int $orderId): array{
+        return $this->orderDAO->findOrder($orderId);
+    }
 }

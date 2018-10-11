@@ -30,12 +30,24 @@ class OrderMySQLDAO implements OrderDAO
         $statement = $this->insertOrderPDOStatement($order);
         $statement->execute();
         $createdOrderId = $this->databaseConnection->lastInsertId();
-
         // Save items in orderItems
         $statement = $this->insertItemsPDOStatement($createdOrderId, $order->getItemCollection());
         $statement->execute();
 
         $this->databaseConnection->commit();
+    }
+
+
+
+    /**
+     * @inheritdoc
+     */
+    public function findOrder(int $orderId): array{
+        $sql = "SELECT * FROM orderItems WHERE orderId = {$orderId}";
+        $statement = $this->databaseConnection->prepare($sql);
+        $statement->execute();
+
+        return $statement->fetchAll();
     }
 
     /**
