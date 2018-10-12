@@ -79,6 +79,6 @@ class CartController {
         }
         $sessionManager->setCart(null);
         $flashMessageService->add("Order placed successfully", \App\Interfaces\FlashMessageServiceInterface::SUCCESS);
-        header("Location: /home.php");
+        header("Location: /receipt.php?orderId=" . $order->getId());
     }
 }
