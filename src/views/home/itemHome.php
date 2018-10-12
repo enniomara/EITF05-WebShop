@@ -11,6 +11,7 @@
                 <input type="number"
                        min="0"
                        class="form-control"
+                       required
                        name="<?php echo intval($item->getId()) ?>"
                        placeholder="Antal"
                 />
