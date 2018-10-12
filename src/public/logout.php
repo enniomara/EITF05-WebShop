@@ -6,12 +6,14 @@ require_once __DIR__ . '/../App/global.php';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Can't logout a nonexisting user
     if (!$sessionManager->isUserSet()) {
         $flashMessageService->add('Cannot logout. No user is logged in.', \App\Interfaces\FlashMessageServiceInterface::ERROR);
         header('Location: /login.php');
         exit();
     }
 
+    // CSRF form protection
     if (!hash_equals($_POST['token'], $sessionManager->getCSRFToken())) {
         $flashMessageService->add('Token mismatch', \App\Interfaces\FlashMessageServiceInterface::ERROR);
         header("Location: /logout.php");
