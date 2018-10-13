@@ -9,6 +9,7 @@ use App\Classes\Cart;
 
 class SessionManagerTest extends TestCase
 {
+
     /**
      * @var SessionManager
      */
@@ -18,6 +19,7 @@ class SessionManagerTest extends TestCase
      * @var Cart
      */
     private $cart;
+
     /**
      * @var User
      */
@@ -34,7 +36,9 @@ class SessionManagerTest extends TestCase
     public function testCheckIfUserSet(): void
     {
         $this->assertFalse($this->session->isUserSet());
+
         $this->session->setUser($this->user);
+
         $this->assertTrue($this->session->isUserSet());
     }
 
