@@ -13,11 +13,6 @@ class OrderService
      */
     private $orderDAO;
 
-    /**
-     * @var PaymentServiceInterface
-     */
-    private $paymentService;
-
     public function __construct(OrderDAO $orderDAO)
     {
         $this->orderDAO = $orderDAO;
@@ -26,16 +21,16 @@ class OrderService
     /**
      * Places a given order (makes payment and saves order).
      * @param Order $order
+     * @param PaymentServiceInterface $paymentService
      */
     public function place(Order $order, PaymentServiceInterface $paymentService)
     {
-        $this->paymentService = $paymentService;
         $totalAmount = 0;
         foreach ($order->getItemCollection()->getItems() as $item) {
             $totalAmount += $item->getPrice() * $order->getItemCollection()->getAmount($item);
         }
-        $this->paymentService->setAmount($totalAmount);
-        $this->paymentService->pay();
+        $paymentService->setAmount($totalAmount);
+        $paymentService->pay();
 
         // Attempt to perform an order
         $this->orderDAO->save($order);
