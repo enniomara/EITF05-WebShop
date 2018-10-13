@@ -31,6 +31,16 @@ class UserServiceTest extends TestCase
      */
     private $sessionManagerStub;
 
+    /**
+     * @var PasswordService|MockObject
+     */
+    private $passwordServiceStub;
+
+    /**
+     * @var string The clear text password that is stored as a hash in $userModel
+     */
+    private $plainTextPassword;
+
     protected function setUp()
     {
         parent::setUp();
@@ -39,54 +49,79 @@ class UserServiceTest extends TestCase
             ->getMock();
         $this->sessionManagerStub = $this->getMockBuilder(SessionManager::class)
             ->getMock();
-        $this->userService = new UserService($this->userDAOStub, $this->sessionManagerStub);
-        $this->userModel = new User("username", "password", "Address");
+        $this->passwordServiceStub = $this->getMockBuilder(PasswordService::class)
+            ->disableOriginalConstructor()
+            ->setMethodsExcept(['verify'])
+            ->getMock();
+        $this->userService = new UserService($this->userDAOStub, $this->sessionManagerStub, $this->passwordServiceStub);
+        // the password for usermodel is 'Password1!' hashed in bcrypt
+        $this->plainTextPassword = 'Password1!';
+        $this->userModel = new User("username", "$2y$10$5vl3FfT/p/0ke1fPvUURA.TdiDH9SxAIsUxXG2yf1.r0CvTNivQAu", "Address");
     }
 
     public function testLogin()
     {
-        $hashedPassword = PasswordService::hash($this->userModel->getPassword());
-        // Assert that the hashed password is used when searching in db
         $this->userDAOStub->expects($this->once())
-            ->method('findOneByUsernameAndPassword')
-            ->with($this->userModel->getUsername(), $hashedPassword)
+            ->method('findOneByUsername')
+            ->with($this->userModel->getUsername())
             ->willReturn($this->userModel);
-        // Assert that saving user to session is called
         $this->sessionManagerStub->expects($this->once())
             ->method('setUser')
             ->with($this->userModel);
         $this->sessionManagerStub->expects($this->once())
             ->method('regenerate');
 
-        $response = $this->userService->login($this->userModel->getUsername(), $this->userModel->getPassword());
+        $response = $this->userService->login($this->userModel->getUsername(), "Password1!");
         $this->assertTrue($response);
     }
 
-    public function testLoginWithIncorrectAuthentication()
+    public function testLoginWithNonExistentUser()
     {
         $this->userDAOStub->expects($this->once())
-            ->method('findOneByUsernameAndPassword')
+            ->method('findOneByUsername')
+            ->with('username')
             ->willReturn(null);
 
         $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Incorrect authentication.');
         $this->userService->login('username', 'password');
+    }
+
+    public function testLoginWithIncorrectPassword() {
+        $this->userDAOStub->expects($this->once())
+            ->method('findOneByUsername')
+            ->with($this->userModel->getUsername())
+            ->willReturn($this->userModel);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Incorrect authentication.');
+        $this->userService->login($this->userModel->getUsername(), 'password');
     }
   
     public function testCreate()
     {
         $username = $this->userModel->getUsername();
-        $password = $this->userModel->getPassword();
+        $password = $this->plainTextPassword;
         $address = $this->userModel->getAddress();
-        $hashedPassword = PasswordService::hash($password);
+
+        $this->passwordServiceStub->expects($this->once())
+            ->method('isValid')
+            ->with($password)
+            ->willReturn(true);
+        $this->passwordServiceStub->expects($this->once())
+            ->method('hash')
+            ->with($password)
+            ->willReturn($this->userModel->getPassword());
+
 
         $this->userDAOStub->expects($this->once())
             ->method('create')
-            ->with($username, $hashedPassword, $address)
+            ->with($username, $this->userModel->getPassword(), $address)
             ->willReturn($username);
 
         $this->userDAOStub->expects($this->once())
-            ->method('findOneByUsernameAndPassword')
-            ->with($username, $hashedPassword)
+            ->method('findOneByUsername')
+            ->with($username)
             ->willReturn($this->userModel);
 
         $response = $this->userService->create($username, $password, $address);
