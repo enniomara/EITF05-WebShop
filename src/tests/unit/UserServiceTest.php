@@ -150,4 +150,12 @@ class UserServiceTest extends TestCase
         $this->expectExceptionMessage("Could not find user with username `{$this->userModel->getUsername()}`");
         $this->userService->find($this->userModel->getUsername());
     }
+
+    public function testLogout() {
+        $this->sessionManagerStub->expects($this->once())
+            ->method('destroy')
+            ->with()
+            ->willReturn(true);
+        $this->assertTrue($this->userService->logout());
+    }
 }

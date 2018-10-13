@@ -70,9 +70,9 @@ class SessionManager implements SessionManagerInterface
     /**
      * Set cart to session
      *
-     * @param Cart The cart with items
+     * @param Cart|null The cart with items
      */
-    public function setCart(Cart $cart)
+    public function setCart(?Cart $cart)
     {
         $_SESSION['CART'] = $cart;
     }

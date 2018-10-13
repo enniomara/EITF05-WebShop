@@ -42,15 +42,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Redirect to the home page where all items are
         header('Location: home.php');
+    } else if ($action === 'place') {
+        $cartController = new CartController();
+        $cartController->handlePlace($databaseConnection, $sessionManager, $flashMessageService, $cart);
     }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    //------------Cart rendering Rendering ----------------------
+    $cartItems = $cart->getItems();
+
+    $view = new View('cart');
+    $view->setAttribute('loggedInUser', $loggedInUser);
+    $view->setAttribute('cartItems', $cartItems);
+    $view->setAttribute('cart', $cart);
+    $view->setAttribute('flashMessages', $flashMessageService->getMessages());
+
+    echo $view->render();
 }
 
-//------------Cart rendering Rendering ----------------------
-$cartItems = $cart->getItems();
+class CartController {
+    public function handlePlace($databaseConnection, $sessionManager, $flashMessageService, $cart) {
+        $orderDAO = new \App\Classes\DAO\OrderMySQLDAO($databaseConnection);
+        $paymentService = new \App\Classes\CardPaymentService($_POST['cardNr'], $_POST['cvv'], $_POST['expiryDate']);
+        $orderService = new \App\Classes\OrderService($orderDAO, $paymentService);
+        $user = $sessionManager->getUser();
 
-$view = new View('cart');
-$view->setAttribute('loggedInUser', $loggedInUser);
-$view->setAttribute('cartItems', $cartItems);
-$view->setAttribute('cart', $cart);
+        $order = new \App\Classes\Models\Order(-1, $user['userId']);
+        $order->setItemCollection($cart->getCartItemInterface());
+        $order->setTime();
 
-echo $view->render();
+        try {
+            $orderService->place($order);
+        } catch(\InvalidArgumentException $e) {
+            $flashMessageService->add("Items must not be empty.", \App\Interfaces\FlashMessageServiceInterface::ERROR);
+            header("Location: /home.php");
+            return;
+        }
+        $sessionManager->setCart(null);
+        $flashMessageService->add("Order placed successfully", \App\Interfaces\FlashMessageServiceInterface::SUCCESS);
+        header("Location: /home.php");
+    }
+}
