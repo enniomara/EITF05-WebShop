@@ -33,6 +33,7 @@ create table orders(
 
 DROP TABLE IF EXISTS blacklistedPasswords;
 CREATE TABLE blacklistedPasswords(
-    password TEXT PRIMARY KEY
+    id integer AUTO_INCREMENT PRIMARY KEY,
+    password char(120)
 );
 
