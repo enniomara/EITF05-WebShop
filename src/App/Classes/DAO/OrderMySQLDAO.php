@@ -43,8 +43,9 @@ class OrderMySQLDAO implements OrderDAO
      * @inheritdoc
      */
     public function findOrder(int $orderId): array{
-        $sql = "SELECT * FROM orderItems WHERE orderId = {$orderId}";
+        $sql = "SELECT * FROM orderItems WHERE orderId = :orderId";
         $statement = $this->databaseConnection->prepare($sql);
+        $statement->bindValue(':orderId', $orderId);
         $statement->execute();
 
         return $statement->fetchAll();
