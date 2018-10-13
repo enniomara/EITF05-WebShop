@@ -15,7 +15,7 @@ $itemDAO = new ItemMySQLDAO($databaseConnection);
 $itemService = new ItemService($itemDAO);
 
 // Getting id from http header
-$orderId = $_GET['orderId'];
+$orderId = intval($_GET['orderId']);
 $view = new View('receipt');
 
 if($sessionManager->isUserSet()){
