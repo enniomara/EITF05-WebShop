@@ -23,7 +23,7 @@ class OrderService
      * @param Order $order
      * @param PaymentServiceInterface $paymentService
      */
-    public function place(Order $order, PaymentServiceInterface $paymentService)
+    public function place(Order $order, PaymentServiceInterface $paymentService): int
     {
         $totalAmount = 0;
         foreach ($order->getItemCollection()->getItems() as $item) {
@@ -33,7 +33,7 @@ class OrderService
         $paymentService->pay();
 
         // Attempt to perform an order
-        $this->orderDAO->save($order);
+        return $this->orderDAO->save($order);
     }
 
     /**
@@ -41,7 +41,7 @@ class OrderService
      * 
      * @param int $orderId
      */
-    public function findOrder(int $orderId): array{
-        return $this->orderDAO->findOrder($orderId);
+    public function findOrderItems(int $orderId): array{
+        return $this->orderDAO->findOrderItems($orderId);
     }
 }

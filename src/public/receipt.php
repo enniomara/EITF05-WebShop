@@ -24,7 +24,7 @@ $itemService = new ItemService($itemDAO);
 $orderId = intval($_GET['orderId']);
 
 // Finding orders
-$orders = $orderService->findOrder($orderId);
+$orders = $orderService->findOrderItems($orderId);
 
 // Adding the orders to a cart for easier handeling
 $cart = new Cart();
