@@ -17,7 +17,7 @@
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 text-right">
                         <p>
-                            <em>Order #: <?php echo $orderId ?></em>
+                            <em>Order #: <?php echo intval($orderId) ?></em>
                         </p>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                                         <strong>0</strong>
                                     </p>
                                     <p>
-                                        <strong><?php echo $cart->calculateTotalPrice(); ?></strong>
+                                        <strong><?php echo intval($cart->calculateTotalPrice()); ?></strong>
                                     </p>
                                 </td>
                             </tr>
@@ -64,7 +64,7 @@
                                 <td>   </td>
                                 <td>   </td>
                                 <td class="text-right"><h4><strong>Total: </strong></h4></td>
-                                <td class="text-center text-danger"><h4><strong><?php echo $cart->calculateTotalPrice(); ?></strong></h4></td>
+                                <td class="text-center text-danger"><h4><strong><?php echo intval($cart->calculateTotalPrice()); ?></strong></h4></td>
                             </tr>
                         </tbody>
                     </table>
