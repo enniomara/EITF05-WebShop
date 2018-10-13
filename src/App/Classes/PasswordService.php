@@ -14,7 +14,7 @@ class PasswordService implements PasswordServiceInterface
      * PasswordService constructor.
      * @param \PDO $databaseConnection
      */
-    private function __construct(\PDO $databaseConnection)
+    public function __construct(\PDO $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
@@ -38,7 +38,7 @@ class PasswordService implements PasswordServiceInterface
      * @param string $password
      * @return string
      */
-    public static function hash(string $password): string
+    public function hash(string $password): string
     {
         return password_hash($password, PASSWORD_BCRYPT);
     }
@@ -139,5 +139,13 @@ class PasswordService implements PasswordServiceInterface
         }
         array_push($this->errorMessages, "Not a valid password.");
         return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function verify(string $password, string $hash): bool
+    {
+        return password_verify($password, $hash);
     }
 }
