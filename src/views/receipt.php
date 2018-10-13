@@ -3,7 +3,6 @@
     <?php include('head.php') ?>
     <body>
         <?php include('navbar/navbar.php') ?>
-        <?php include('flashMessages.php') ?>
         <br><br>
         <div class="container">
         <div class="row">
