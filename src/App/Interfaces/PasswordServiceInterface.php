@@ -4,8 +4,8 @@ namespace App\Interfaces;
 
 interface PasswordServiceInterface
 {
-    public static function hash(string $password) : string;
-    public function isValid(string $password) : bool;
+    public function hash(string $password): string;
+
     /**
      * Verify that a password and its hash matches.
      * @param string $password
@@ -14,4 +14,5 @@ interface PasswordServiceInterface
      */
     public static function verify(string $password, string $hash): bool;
 
+    public function isValid(string $password): bool;
 }
