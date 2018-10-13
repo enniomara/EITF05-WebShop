@@ -50,6 +50,16 @@ class UserService
     }
 
     /**
+     * Logout a user from the application
+     *
+     * @return bool
+     */
+    public function logout(): bool
+    {
+        return $this->sessionManager->destroy();
+    }
+
+    /**
      * Finds a user from the database
      *
      * @param string $username
