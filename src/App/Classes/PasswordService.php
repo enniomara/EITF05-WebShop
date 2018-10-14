@@ -131,10 +131,11 @@ class PasswordService implements PasswordServiceInterface
      */
     private function isNotCommon(): bool
     {
-        $query = $this->databaseConnection->prepare("SELECT count() FROM 'blacklistedPasswords' WHERE password = :passwordString");
+        $query = $this->databaseConnection->prepare("SELECT count(id) FROM blacklistedPasswords WHERE password = :passwordString");
         $query->bindValue(':passwordString', $this->password);
-        $result = $query->execute();
-        if ($result == 0) {
+        $query->execute();
+        $count = $query->fetchColumn();
+        if ($count == 0) {
             return true;
         }
         array_push($this->errorMessages, "Not a valid password.");
