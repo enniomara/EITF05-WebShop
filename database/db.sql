@@ -31,3 +31,9 @@ create table orders(
     foreign key (username) references users(username)
 );
 
+DROP TABLE IF EXISTS blacklistedPasswords;
+CREATE TABLE blacklistedPasswords(
+    id integer AUTO_INCREMENT PRIMARY KEY,
+    password char(120)
+);
+

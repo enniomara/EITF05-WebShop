@@ -15,7 +15,7 @@ $databaseConnection = new DBConnection();
 $sessionManager = new \App\Classes\SessionManager();
 $sessionManager->start();
 
-$userService = new UserService(new UserMySQLDAO($databaseConnection), $sessionManager);
+$userService = new UserService(new UserMySQLDAO($databaseConnection), $sessionManager, new \App\Classes\PasswordService($databaseConnection));
 
 $loggedInUser = null;
 if ($sessionManager->getUser() !== null) {

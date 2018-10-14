@@ -51,7 +51,7 @@ class UserMySQLDAO implements UserDAO
         if (empty($result)) {
             return null;
         }
-        return new User($result[0]['username'], $result[0]['username'], $result[0]['address']);
+        return new User($result[0]['username'], $result[0]['password'], $result[0]['address']);
     }
 
     /**

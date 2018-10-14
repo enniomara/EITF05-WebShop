@@ -8,13 +8,6 @@ interface UserDAO
 {
     /**
      * @param string $username
-     * @param string $password
-     * @return User|null The found user model.
-     */
-    public function findOneByUsernameAndPassword(string $username, string $password): ?User;
-
-    /**
-     * @param string $username
      * @return User|null
      */
     public function findOneByUsername(string $username): ?User;

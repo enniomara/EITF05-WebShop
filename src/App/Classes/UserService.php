@@ -4,6 +4,7 @@ namespace App\Classes;
 
 use App\Classes\Models\User;
 use App\Interfaces\DAO\UserDAO;
+use App\Interfaces\PasswordServiceInterface;
 
 class UserService
 {
@@ -17,10 +18,16 @@ class UserService
      */
     private $sessionManager;
 
-    public function __construct(UserDAO $userDAO, SessionManager $sessionManager)
+    /**
+     * @var PasswordServiceInterface
+     */
+    private $passwordService;
+
+    public function __construct(UserDAO $userDAO, SessionManager $sessionManager, PasswordServiceInterface $passwordService)
     {
         $this->userDAO = $userDAO;
         $this->sessionManager = $sessionManager;
+        $this->passwordService = $passwordService;
     }
 
     /**
@@ -31,15 +38,15 @@ class UserService
      */
     public function login(string $username, string $password): bool
     {
-        /** Validate credentials */
+        $user = $this->userDAO->findOneByUsername($username);
 
-        /** Hash password */
-        $hashedPassword = PasswordService::hash($password);
-
-        /** Check against database */
-        $user = $this->userDAO->findOneByUsernameAndPassword($username, $hashedPassword);
         if (null === $user) {
-            throw new \InvalidArgumentException('Incorrect authentication');
+            throw new \InvalidArgumentException('Incorrect authentication.');
+        }
+
+        // Validate password matches with hash
+        if (false === $this->passwordService::verify($password, $user->getPassword())) {
+            throw new \InvalidArgumentException('Incorrect authentication.');
         }
 
         /** Set session */
@@ -85,25 +92,16 @@ class UserService
     public function create(string $username, string $password, string $address): User
     {
         /** Validate credentials */
+        if (false === $this->passwordService->isValid($password)) {
+            throw new \InvalidArgumentException("Password is invalid.");
+        }
+
         /** Generate hash */
-        $hashedPassword = PasswordService::hash($password);
+        $hashedPassword = $this->passwordService->hash($password);
         /** Save to db */
-        $result = $this->userDAO->create($username, $password, $address);
+        $result = $this->userDAO->create($username, $hashedPassword, $address);
         /** Return created user */
-        return $this->userDAO->findOneByUsernameAndPassword($result, $hashedPassword);
+        return $this->userDAO->findOneByUsername($result);
     }
 }
 
-// Mocked version of password service. Swap with real one when it is implemented
-class PasswordService implements \App\Interfaces\PasswordServiceInterface
-{
-    public static function hash(string $password): string
-    {
-        return $password;
-    }
-
-    public static function isValid(string $password): bool
-    {
-        return true;
-    }
-}
