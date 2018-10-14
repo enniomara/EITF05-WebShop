@@ -4,7 +4,7 @@ require('../App/global.php');
 // Checking if user is not set
 if(!$sessionManager->isUserSet()){
     echo "<h1>404</h1><p>Not found</p>";
-    return;
+    exit();
 }
 
 use App\Classes\View;
