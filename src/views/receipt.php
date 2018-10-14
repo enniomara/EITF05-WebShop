@@ -35,7 +35,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach($cartItems as $item){
+                            <?php foreach($items as $item){
                                 include('receipt/itemRow.php');
                             } 
                             ?>

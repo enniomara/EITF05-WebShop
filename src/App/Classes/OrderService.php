@@ -5,6 +5,8 @@ namespace App\Classes;
 use App\Classes\Models\Order;
 use App\Interfaces\DAO\OrderDAO;
 use App\Interfaces\PaymentServiceInterface;
+use App\Classes\Models\ItemCollection;
+use App\Classes\Models\Item;
 
 class OrderService
 {
@@ -39,10 +41,18 @@ class OrderService
 
     /**
      * Find order items by order id.
-     * 
+     *
      * @param int $orderId
+     * @return ItemCollection
      */
-    public function findOrderItems(int $orderId): array{
-        return $this->orderDAO->findOrderItems($orderId);
+    public function findOrderItems(int $orderId): ItemCollection{
+        $orderItems = $this->orderDAO->findOrderItems($orderId);
+        $itemCollection = new ItemCollection();
+
+        foreach($orderItems as $item){
+            $itemCollection->add(new Item($item['id'], $item['name'], $item['price']), $item['amount']);
+        }
+
+        return $itemCollection;
     }
 }

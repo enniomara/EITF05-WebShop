@@ -23,23 +23,19 @@ $itemService = new ItemService($itemDAO);
 // Getting id from http header
 $orderId = intval($_GET['orderId']);
 
-// Finding orders
-$orders = $orderService->findOrderItems($orderId);
+// Finding order items
+$items = $orderService->findOrderItems($orderId, $databaseConnection);
 
-// Adding the orders to a cart for easier handeling
 $cart = new Cart();
-foreach ($orders as $order){
-    $cart->addItem($itemService->findAllByIds($order['itemId'])[0], $order['amount']);
+foreach($items->getItems() as $item){
+    $cart->addItem($item, $items->getAmount($item));
 }
-
-// Getting cart items
-$cartItems = $cart->getItems();
 
 $view = new View('receipt');
 $view->setAttribute('title', 'Receipt#' . $orderId);
 $view->setAttribute('loggedInUser', $loggedInUser);
 $view->setAttribute('cart', $cart);
-$view->setAttribute('cartItems', $cartItems);
+$view->setAttribute('items', $items->getItems());
 $view->setAttribute('orderId', $orderId);
 
 
