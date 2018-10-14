@@ -8,31 +8,33 @@
                 <center> Your Cart</center>
             </h1>
         </header>
+        <div class="container">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Produkt</th>
+                    <th>Antal</th>
+                    <th>kr/st</th>
+                    <th>Radnetto</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach ($cartItems as $item) {
+                    include('cart/itemRow.php');
+                }
+                ?>
+                <tr>
+                    <th></th>
+                    <td></td>
+                    <th>Totalsumma:</th>
+                    <th><?php echo intval($cart->calculateTotalPrice()); ?> kr</th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Produkt</th>
-                <th>Antal</th>
-                <th>kr/st</th>
-                <th>Radnetto</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php
-            foreach ($cartItems as $item) {
-                include('cart/itemRow.php');
-            }
-            ?>
-            <tr>
-                <th></th>
-                <td></td>
-                <th>Totalsumma:</th>
-                <th><?php echo intval($cart->calculateTotalPrice()); ?> kr</th>
-            </tr>
-        </table>
-
-        <div>
+        <div class="container">
             <form action="cart.php?action=place" name="placeOrder" method="POST">
                 <label>Card Number: <input type="text" name="cardNr"></label> <br>
                 <label>CVV: <input type="text" name="cvv"></label> <br>

@@ -1,6 +1,6 @@
 <tr>
     <th><?php echo $this->escape($item->getName()) ?></th>
-    <td><?php echo intval($cart->getAmount($item)) ?> st</td>
-    <td><?php echo intval($item->getPrice()) ?> kr</td>
-    <td><?php echo intval($item->getPrice()) * $cart->getAmount($item) ?> kr </td>
+    <th><?php echo intval($cart->getAmount($item)) ?> st</th>
+    <th><?php echo intval($item->getPrice()) ?> kr</th>
+    <th><?php echo intval($item->getPrice()) * $cart->getAmount($item) ?> kr </th>
 </tr>'
