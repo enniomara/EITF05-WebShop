@@ -43,7 +43,8 @@ class OrderMySQLDAO implements OrderDAO
     /**
      * @inheritdoc
      */
-    public function checkRight(int $orderId, $username): bool{
+    public function checkRight(int $orderId, string $username): bool
+    {
         $sql = "SELECT id, username FROM orders WHERE id = :orderId AND username = :username";
         $statement = $this->databaseConnection->prepare($sql);
         $statement->bindValue(':orderId', $orderId);
@@ -56,7 +57,8 @@ class OrderMySQLDAO implements OrderDAO
     /**
      * @inheritdoc
      */
-    public function findOrderItems(int $orderId): array{
+    public function findOrderItems(int $orderId): array
+    {
         $sql = "SELECT id, name, price, amount FROM orderItems INNER JOIN items ON orderItems.itemId=items.id WHERE orderId = :orderId";
         $statement = $this->databaseConnection->prepare($sql);
         $statement->bindValue(':orderId', $orderId);

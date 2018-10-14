@@ -45,11 +45,12 @@ class OrderService
      * @param int $orderId
      * @return ItemCollection
      */
-    public function findOrderItems(int $orderId): ItemCollection{
+    public function findOrderItems(int $orderId): ItemCollection
+    {
         $orderItems = $this->orderDAO->findOrderItems($orderId);
         $itemCollection = new ItemCollection();
 
-        foreach($orderItems as $item){
+        foreach ($orderItems as $item) {
             $itemCollection->add(new Item($item['id'], $item['name'], $item['price']), $item['amount']);
         }
 
@@ -59,7 +60,8 @@ class OrderService
     /**
      * Checks if user has right to view a document
      */
-    public function checkRight(int $orderId, $username): bool{
+    public function checkRight(int $orderId, $username): bool
+    {
         return $this->orderDAO->checkRight($orderId, $username);
     }
 }

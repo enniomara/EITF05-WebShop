@@ -57,7 +57,8 @@ class Order
     /**
      * @param int
      */
-    public function setId(int $id){
+    public function setId(int $id)
+    {
         $this->id = $id;
     }
 
@@ -91,7 +92,8 @@ class Order
         }
     }
 
-    public function getOwnerId() {
+    public function getOwnerId()
+    {
         return $this->ownerId;
     }
 }

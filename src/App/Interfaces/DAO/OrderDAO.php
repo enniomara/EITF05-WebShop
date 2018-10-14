@@ -27,9 +27,9 @@ interface OrderDAO
      * Checks if user has rights to view a order
      *
      * @param int $orderId
-     * @param $username
+     * @param string $username
      *
      * @return bool
      */
-    public function checkRight(int $orderId, $username): bool;
+    public function checkRight(int $orderId, string $username): bool;
 }
