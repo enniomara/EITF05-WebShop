@@ -22,7 +22,7 @@ class OrderMySQLDAO implements OrderDAO
     /**
      * @inheritdoc
      */
-    public function save(Order $order): void
+    public function save(Order $order): Order
     {
         $this->databaseConnection->beginTransaction();
 
@@ -30,12 +30,41 @@ class OrderMySQLDAO implements OrderDAO
         $statement = $this->insertOrderPDOStatement($order);
         $statement->execute();
         $createdOrderId = $this->databaseConnection->lastInsertId();
-
         // Save items in orderItems
         $statement = $this->insertItemsPDOStatement($createdOrderId, $order->getItemCollection());
         $statement->execute();
 
         $this->databaseConnection->commit();
+
+        $order->setId($createdOrderId);
+        return $order;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function checkRight(int $orderId, string $username): bool
+    {
+        $sql = "SELECT id, username FROM orders WHERE id = :orderId AND username = :username";
+        $statement = $this->databaseConnection->prepare($sql);
+        $statement->bindValue(':orderId', $orderId);
+        $statement->bindValue(':username', $username, \PDO::PARAM_STR);
+        $statement->execute();
+
+        return empty($statement->fetchAll());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findOrderItems(int $orderId): array
+    {
+        $sql = "SELECT id, name, price, amount FROM orderItems INNER JOIN items ON orderItems.itemId=items.id WHERE orderId = :orderId";
+        $statement = $this->databaseConnection->prepare($sql);
+        $statement->bindValue(':orderId', $orderId);
+        $statement->execute();
+
+        return $statement->fetchAll();
     }
 
     /**

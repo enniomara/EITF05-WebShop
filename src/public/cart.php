@@ -63,7 +63,7 @@ class CartController {
     public function handlePlace($databaseConnection, $sessionManager, $flashMessageService, $cart) {
         $orderDAO = new \App\Classes\DAO\OrderMySQLDAO($databaseConnection);
         $paymentService = new \App\Classes\CardPaymentService($_POST['cardNr'], $_POST['cvv'], $_POST['expiryDate']);
-        $orderService = new \App\Classes\OrderService($orderDAO, $paymentService);
+        $orderService = new \App\Classes\OrderService($orderDAO);
         $user = $sessionManager->getUser();
 
         $order = new \App\Classes\Models\Order(-1, $user['userId']);
@@ -71,7 +71,7 @@ class CartController {
         $order->setTime();
 
         try {
-            $orderService->place($order);
+            $order = $orderService->place($order, $paymentService);
         } catch(\InvalidArgumentException $e) {
             $flashMessageService->add("Items must not be empty.", \App\Interfaces\FlashMessageServiceInterface::ERROR);
             header("Location: /home.php");
@@ -79,6 +79,6 @@ class CartController {
         }
         $sessionManager->setCart(null);
         $flashMessageService->add("Order placed successfully", \App\Interfaces\FlashMessageServiceInterface::SUCCESS);
-        header("Location: /home.php");
+        header("Location: /receipt.php?orderId=" . $order->getId());
     }
 }
