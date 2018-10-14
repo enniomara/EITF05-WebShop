@@ -4,12 +4,14 @@
 <?php include("navbar/navbar.php"); ?>
 <?php include("flashMessages.php"); ?>
 
-<div class="container">
-    <p>Are you sure you want to log out</p>
+<div class="container" style="margin-top: 5%">
+    <center>
+    <h3>Are you sure you want to log out</h3></br>
     <form method="POST" action="logout.php">
         <input type="hidden" name="token" value="<?php echo $CSRFToken ?>">
         <button class="btn btn-primary" type="submit">Log out</button>
     </form>
+    </center>
 </div>
 
 <?php include("footer.php"); ?>
