@@ -8,7 +8,7 @@
     <p>Are you sure you want to log out</p>
     <form method="POST" action="logout.php">
         <input type="hidden" name="token" value="<?php echo $CSRFToken ?>">
-        <button type="submit">Log out</button>
+        <button class="btn btn-primary" type="submit">Log out</button>
     </form>
 </div>
 

@@ -17,7 +17,7 @@
                 include("captcha.php");
             }
             ?>
-            <button type="submit">Submit</button>
+            <button class="btn btn-primary" type="submit">Submit</button>
         </form>
     </div>
     <div class="container">
@@ -29,7 +29,7 @@
             <br />
             <label for="address">Address:  <input type="text" name="address"></label>
             <br />
-            <button type="submit">Submit</button>
+            <button class="btn btn-primary" type="submit">Submit</button>
             <input type="hidden" name="token" value="<?php echo $CSRFToken ?>">
         </form>
     </div>
