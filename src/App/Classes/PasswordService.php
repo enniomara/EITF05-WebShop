@@ -29,7 +29,7 @@ class PasswordService implements PasswordServiceInterface
     public function isValid(string $password): bool
     {
         $this->password = $password;
-        return ($this->hasUppercase() || $this->hasLowercase() || $this->hasNumber() || $this->hasSpecialChar() || $this->checkSymbolLength() || $this->isNotCommon());
+        return ($this->hasUppercase() && $this->hasLowercase() && $this->hasNumber() && $this->hasSpecialChar() && $this->checkSymbolLength() && $this->isNotCommon());
     }
 
     /**
