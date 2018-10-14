@@ -55,6 +55,13 @@ class Order
     }
 
     /**
+     * @param int
+     */
+    public function setId(int $id){
+        $this->id = $id;
+    }
+
+    /**
      * @return int
      */
     public function getId(): int

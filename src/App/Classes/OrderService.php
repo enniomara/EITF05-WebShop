@@ -22,8 +22,9 @@ class OrderService
      * Places a given order (makes payment and saves order).
      * @param Order $order
      * @param PaymentServiceInterface $paymentService
+     * @return Order The same input order but with correct order ID.
      */
-    public function place(Order $order, PaymentServiceInterface $paymentService): int
+    public function place(Order $order, PaymentServiceInterface $paymentService): Order
     {
         $totalAmount = 0;
         foreach ($order->getItemCollection()->getItems() as $item) {

@@ -22,7 +22,7 @@ class OrderMySQLDAO implements OrderDAO
     /**
      * @inheritdoc
      */
-    public function save(Order $order): int
+    public function save(Order $order): Order
     {
         $this->databaseConnection->beginTransaction();
 
@@ -35,7 +35,9 @@ class OrderMySQLDAO implements OrderDAO
         $statement->execute();
 
         $this->databaseConnection->commit();
-        return intval($createdOrderId);
+
+        $order->setId($createdOrderId);
+        return $order;
     }
 
 

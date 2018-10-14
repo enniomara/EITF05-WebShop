@@ -71,7 +71,7 @@ class CartController {
         $order->setTime();
 
         try {
-            $newOrderId = $orderService->place($order, $paymentService);
+            $order = $orderService->place($order, $paymentService);
         } catch(\InvalidArgumentException $e) {
             $flashMessageService->add("Items must not be empty.", \App\Interfaces\FlashMessageServiceInterface::ERROR);
             header("Location: /home.php");
@@ -79,6 +79,6 @@ class CartController {
         }
         $sessionManager->setCart(null);
         $flashMessageService->add("Order placed successfully", \App\Interfaces\FlashMessageServiceInterface::SUCCESS);
-        header("Location: /receipt.php?orderId=" . $newOrderId);
+        header("Location: /receipt.php?orderId=" . $order->getId());
     }
 }

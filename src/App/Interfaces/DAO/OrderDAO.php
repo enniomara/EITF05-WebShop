@@ -10,9 +10,9 @@ interface OrderDAO
      * Save an order to the database.
      *
      * @param Order $order
-     * @return int Returns the saved order id
+     * @return Order The input order but with correct order ID.
      */
-    public function save(Order $order): int;
+    public function save(Order $order): Order;
 
     /**
      * Finds order from the database by order id.
