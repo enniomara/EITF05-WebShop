@@ -10,8 +10,14 @@
         <br />
         <label for="password">Password:</label> <input type="password" name="password">
         <br />
-        <button type="submit">Submit</button>
+
         <input type="hidden" name="token" value="<?php echo $CSRFToken ?>">
+        <?php
+        if ($showCaptcha) {
+            include("captcha.php");
+        }
+        ?>
+        <button type="submit">Submit</button>
     </form>
 
     <h1>Sign up:</h1>
