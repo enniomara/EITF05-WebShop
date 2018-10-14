@@ -16,8 +16,20 @@ interface OrderDAO
 
     /**
      * Finds order from the database by order id.
-     * 
+     *
      * @param int $orderId
+     *
+     * @return array
      */
     public function findOrderItems(int $orderId): array;
+
+    /**
+     * Checks if user has rights to view a order
+     *
+     * @param int $orderId
+     * @param $username
+     *
+     * @return bool
+     */
+    public function checkRight(int $orderId, $username): bool;
 }
