@@ -4,7 +4,7 @@
             <img class="card-img-top" src="http://placehold.it/500x325" alt="">
 
             <div class="card-body">
-                <h3 class="card-title"><?php echo $this->escape($item->getName()) ?></h3>
+                <h3 class="card-title"><?php echo $item->getName() ?></h3>
                 <h4><?php echo $this->escape($item->getPrice()) ?>kr</h4>
             </div>
             <div class="card-footer">
