@@ -1,1 +1,1 @@
-<li><a href="/login.php">Login</a></li>
+<li><a class="btn btn-primary" href="/login.php">Login</a></li>
