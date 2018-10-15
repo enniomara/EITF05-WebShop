@@ -22,7 +22,7 @@ class UserMySQLDAO implements UserDAO
      */
     public function findOneByUsernameAndPassword(string $username, string $password): ?User
     {
-        $stmt = $this->databaseConnection->prepare('select username, address from users where username = ? AND password = ?');
+        $stmt = $this->databaseConnection->query('select username, address from users where username = ? AND password = ?');
         $stmt->execute([
             $username,
             $password
@@ -41,10 +41,8 @@ class UserMySQLDAO implements UserDAO
      */
     public function findOneByUsername(string $username): ?User
     {
-        $stmt = $this->databaseConnection->prepare('select username, password, address from users where username = ?');
-        $stmt->execute([
-            $username,
-        ]);
+        $stmt = $this->databaseConnection->query('select username, password, address from users where username = {$username}');
+        $stmt->execute();
 
         $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -59,11 +57,11 @@ class UserMySQLDAO implements UserDAO
      */
     public function create(string $username, string $password, string $address): string
     {
-        $sql = "INSERT INTO users(username, password, address) VALUES (:username, :password, :address)";
-        $stmt = $this->databaseConnection->prepare($sql);
-        $stmt->bindValue(':username', $username);
-        $stmt->bindValue(':password', $password);
-        $stmt->bindValue(':address', $address);
+        $sql = "INSERT INTO users(username, password, address) VALUES ({$username}, {$password}, {$address})";
+        $stmt = $this->databaseConnection->query($sql);
+        //$stmt->bindValue(':username', $username);
+        //$stmt->bindValue(':password', $password);
+        //$stmt->bindValue(':address', $address);
 
         try {
             $stmt->execute();

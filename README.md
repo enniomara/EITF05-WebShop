@@ -3,6 +3,9 @@
 XSS is done by dumping the cookies (including php session id) when a user is logged in. This is done by exploiting that the item
 name is not escaped. An item name with the value `<script>alert(document.cookie)</script> Båt` will show the cookies as an alert box.
 
+## SQL Injection
+SQL Injection can be done by example adding `'` to the username when signing upp or other SQL query.
+
 # EITF05-WebShop
 
 Course page: https://www.eit.lth.se/index.php?ciuid=1151&coursepage=7434
