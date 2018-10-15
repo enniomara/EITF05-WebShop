@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Redirect to the home page where all items are
-        header('Location: home.php');
+        header('Location: index.php');
     } else if ($action === 'place') {
         $cartController = new CartController();
         $cartController->handlePlace($databaseConnection, $sessionManager, $flashMessageService, $cart);
@@ -74,11 +74,11 @@ class CartController {
             $order = $orderService->place($order, $paymentService);
         } catch(\InvalidArgumentException $e) {
             $flashMessageService->add("Items must not be empty.", \App\Interfaces\FlashMessageServiceInterface::ERROR);
-            header("Location: /home.php");
+            header("Location: /index.php");
             return;
         }
         $sessionManager->setCart(null);
-        $flashMessageService->add("Order placed successfully", \App\Interfaces\FlashMessageServiceInterface::SUCCESS);
+        //$flashMessageService->add("Order placed successfully", \App\Interfaces\FlashMessageServiceInterface::SUCCESS);
         header("Location: /receipt.php?orderId=" . $order->getId());
     }
 }
