@@ -1,28 +1,17 @@
 <?php
+require('../App/global.php');
 
-require_once __DIR__ . '/../App/global.php';
+use App\Classes\View;
+use App\Classes\ItemService;
+use App\Classes\DAO\ItemMySQLDAO;
 
-use App\Classes\SessionManager;
+$itemDAO = new ItemMySQLDAO($databaseConnection);
+$itemService = new ItemService($itemDAO);
+$items = $itemService->findAllItems();
 
-try {
-    $session = new SessionManager();
+$view = new View('index');
+$view->setAttribute('loggedInUser', $loggedInUser);
+$view->setAttribute('items', $items);
+$view->setAttribute('flashMessages', $flashMessageService->getMessages());
 
-    //Starting session
-    try{
-        $session->start();
-    } catch(Exception $e){
-        echo $e;
-    }
-
-    $items = [];
-    foreach ($databaseConnection->query('SELECT * from users') as $row) {
-        $items[] = $row;
-    }
-
-    echo '<pre>';
-    print_r($items);
-    echo '</pre>';
-} catch (PDOException $e) {
-    print "Error!: " . $e->getMessage() . "<br/>";
-    die();
-}
+echo $view->render();
