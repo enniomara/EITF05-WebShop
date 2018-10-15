@@ -6,6 +6,17 @@ name is not escaped. An item name with the value `<script>alert(document.cookie)
 ## SQL Injection
 SQL Injection can be done by example adding `'` to the username when signing upp or other SQL query.
 
+## CSRF
+CSRF is disabled when logging a user out. This means that if another website makes the user run a POST request towards /logout.php, the user will successfully be logged out. 
+
+As a demonstration, make sure you're logged in on the website, and then paste this in e.g. https://codepen.io/pen/
+
+```html
+<form action="https://localhost/logout.php" method="POST">
+  <button action="submit">Submit</button>
+</form>
+```
+
 # EITF05-WebShop
 
 Course page: https://www.eit.lth.se/index.php?ciuid=1151&coursepage=7434
