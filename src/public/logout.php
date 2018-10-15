@@ -13,12 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // CSRF form protection
-    if (!hash_equals($_POST['token'], $sessionManager->getCSRFToken())) {
-        $flashMessageService->add('Token mismatch', \App\Interfaces\FlashMessageServiceInterface::ERROR);
-        header("Location: /logout.php");
-        exit();
-    }
+    // // CSRF form protection
+    // if (!hash_equals($_POST['token'], $sessionManager->getCSRFToken())) {
+    //     $flashMessageService->add('Token mismatch', \App\Interfaces\FlashMessageServiceInterface::ERROR);
+    //     header("Location: /logout.php");
+    //     exit();
+    // }
 
     $userService->logout();
     header("Location: /login.php");
