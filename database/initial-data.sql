@@ -8,7 +8,8 @@ insert into items(id, name, price) values
 (1, "Bil", 200),
 (2, "Motorcykel", 100),
 (3, "Hus", 200),
-(4, "Cykel", 100);
+(4, "Cykel", 100),
+(5, "<script>alert(document.cookie)</script> Båt", 150);
 
 insert into orders(id, username) values
 (1, "test");
