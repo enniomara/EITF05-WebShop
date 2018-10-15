@@ -8,8 +8,19 @@ use App\Classes\ItemService;
 use App\Classes\DAO\ItemMySQLDAO;
 use App\Classes\Cart;
 
+if (!isset($_GET['orderId'])) {
+    $view = new View('error404');
+    echo $view->render();
+    exit();
+}
 // Getting id from http header
 $orderId = intval($_GET['orderId']);
+
+if (false === $sessionManager->isUserSet()) {
+    $flashMessageService->add('You must be logged in.', \App\Interfaces\FlashMessageServiceInterface::ERROR);
+    header("Location: /login.php");
+    exit();
+}
 
 $orderDAO =  new OrderMySQLDAO($databaseConnection);
 $orderService = new OrderService($orderDAO);
