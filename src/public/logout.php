@@ -4,6 +4,11 @@ use App\Classes\View;
 
 require_once __DIR__ . '/../App/global.php';
 
+if (false === $sessionManager->isUserSet()) {
+    $flashMessageService->add('You must be logged in.', \App\Interfaces\FlashMessageServiceInterface::ERROR);
+    header("Location: /login.php");
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Can't logout a nonexisting user

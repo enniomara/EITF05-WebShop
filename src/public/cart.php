@@ -6,6 +6,12 @@ use App\Classes\Cart;
 use App\Classes\DAO\ItemMySQLDAO;
 use App\Classes\ItemService;
 
+if (false === $sessionManager->isUserSet()) {
+    $flashMessageService->add('You must be logged in.', \App\Interfaces\FlashMessageServiceInterface::ERROR);
+    header("Location: /login.php");
+    exit();
+}
+
 $itemDAO = new ItemMySQLDAO($databaseConnection);
 $itemService = new ItemService($itemDAO);
 
