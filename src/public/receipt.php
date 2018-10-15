@@ -14,7 +14,7 @@ if (!isset($_GET['orderId'])) {
     exit();
 }
 // Getting id from http header
-$orderId = intval($_GET['orderId']);
+$orderId = $_GET['orderId'];
 
 if (false === $sessionManager->isUserSet()) {
     $flashMessageService->add('You must be logged in.', \App\Interfaces\FlashMessageServiceInterface::ERROR);
@@ -26,7 +26,7 @@ $orderDAO =  new OrderMySQLDAO($databaseConnection);
 $orderService = new OrderService($orderDAO);
 
 // Checking if user is not set
-if (!$sessionManager->isUserSet() && $orderService->checkRight($orderId, $sessionManager->getUser()['userId'])) {
+if (!($sessionManager->isUserSet() && $orderService->checkRight($orderId, $sessionManager->getUser()['userId']))) {
     $view = new View('error404');
     echo $view->render();
     exit();

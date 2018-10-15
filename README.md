@@ -4,7 +4,10 @@ XSS is done by dumping the cookies (including php session id) when a user is log
 name is not escaped. An item name with the value `<script>alert(document.cookie)</script> Båt` will show the cookies as an alert box.
 
 ## SQL Injection
-SQL Injection can be done by example adding `'` to the username when signing upp or other SQL query.
+SQL Injection can be done by going to reciept.php?orderId and adding `1' or 1=1 --'` to the URL. So the url will be https://localhost/reciept.php?orderId=1' or 1=1 --'.
+This allows an attacker to access a reciept it does not own.
+
+Note: You must be logged in as another user (not test as it owns reciept with id 1).
 
 ## CSRF
 CSRF is disabled when logging a user out. This means that if another website makes the user run a POST request towards /logout.php, the user will successfully be logged out. 

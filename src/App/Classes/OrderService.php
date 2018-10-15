@@ -60,7 +60,7 @@ class OrderService
     /**
      * Checks if user has right to view a document
      */
-    public function checkRight(int $orderId, $username): bool
+    public function checkRight(string $orderId, $username): bool
     {
         return $this->orderDAO->checkRight($orderId, $username);
     }

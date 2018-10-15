@@ -43,15 +43,15 @@ class OrderMySQLDAO implements OrderDAO
     /**
      * @inheritdoc
      */
-    public function checkRight(int $orderId, string $username): bool
+    public function checkRight(string $orderId, string $username): bool
     {
-        $sql = "SELECT id, username FROM orders WHERE id = :orderId AND username = :username";
-        $statement = $this->databaseConnection->prepare($sql);
-        $statement->bindValue(':orderId', $orderId);
-        $statement->bindValue(':username', $username, \PDO::PARAM_STR);
+        $sql = "SELECT id, username FROM orders WHERE id = '$orderId' AND username = '$username'";
+        $statement = $this->databaseConnection->query($sql);
+        // $statement->bindValue(':orderId', $orderId);
+        // $statement->bindValue(':username', $username, \PDO::PARAM_STR);
         $statement->execute();
 
-        return empty($statement->fetchAll());
+        return !empty($statement->fetchAll());
     }
 
     /**

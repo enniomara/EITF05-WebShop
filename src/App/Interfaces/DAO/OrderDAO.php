@@ -31,5 +31,5 @@ interface OrderDAO
      *
      * @return bool
      */
-    public function checkRight(int $orderId, string $username): bool;
+    public function checkRight(string $orderId, string $username): bool;
 }
