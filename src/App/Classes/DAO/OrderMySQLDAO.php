@@ -51,7 +51,7 @@ class OrderMySQLDAO implements OrderDAO
         $statement->bindValue(':username', $username, \PDO::PARAM_STR);
         $statement->execute();
 
-        return empty($statement->fetchAll());
+        return !empty($statement->fetchAll());
     }
 
     /**
