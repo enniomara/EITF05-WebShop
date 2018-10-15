@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($loggedIn) {
                 $captchaService->resetCaptchaAttempts();
                 $flashMessageService->add('Successfully logged in.', \App\Interfaces\FlashMessageServiceInterface::SUCCESS);
-                header('Location: /home.php');
+                header('Location: /index.php');
                 exit();
             }
         }
