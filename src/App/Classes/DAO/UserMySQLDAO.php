@@ -41,7 +41,7 @@ class UserMySQLDAO implements UserDAO
      */
     public function findOneByUsername(string $username): ?User
     {
-        $stmt = $this->databaseConnection->query('select username, password, address from users where username = {$username}');
+        $stmt = $this->databaseConnection->query("select username, password, address from users where username = '$username'");
         $stmt->execute();
 
         $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -57,7 +57,7 @@ class UserMySQLDAO implements UserDAO
      */
     public function create(string $username, string $password, string $address): string
     {
-        $sql = "INSERT INTO users(username, password, address) VALUES ({$username}, {$password}, {$address})";
+        $sql = "INSERT INTO users(username, password, address) VALUES ('$username', '$password', '$address')";
         $stmt = $this->databaseConnection->query($sql);
         //$stmt->bindValue(':username', $username);
         //$stmt->bindValue(':password', $password);
